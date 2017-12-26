@@ -1,8 +1,11 @@
 package com.szczwany.calculator.Project.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.szczwany.calculator.Calculation.model.Calculation;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "projects")
@@ -13,9 +16,13 @@ public class Project
     @Column(name = "id")
     private Long id;
 
-    @NotEmpty
+    @NotBlank
     @Column(name = "name")
     private String name;
+
+    //@JsonIgnore
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Calculation> calculations = new ArrayList<>();
 
     public Long getId()
     {
@@ -35,5 +42,15 @@ public class Project
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public List<Calculation> getCalculations()
+    {
+        return calculations;
+    }
+
+    public void setCalculations(List<Calculation> calculations)
+    {
+        this.calculations = calculations;
     }
 }
