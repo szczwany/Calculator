@@ -2,6 +2,8 @@ package com.szczwany.calculator.Calculation.controller;
 
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.service.CalculationService;
+import com.szczwany.calculator.Project.model.Project;
+import com.szczwany.calculator.Project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,47 +11,59 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/v1/calculations")
+@RequestMapping(value = "/v1/projects/{projectId}/calculations")
 public class CalculationController
 {
+    private ProjectService projectService;
     private CalculationService calculationService;
 
     @Autowired
-    public CalculationController(CalculationService calculationService)
+    public CalculationController(ProjectService projectService, CalculationService calculationService)
     {
+        this.projectService = projectService;
         this.calculationService = calculationService;
     }
 
     @GetMapping(value = "")
-    public List<Calculation> getCalculations()
+    public List<Calculation> getCalculations(@PathVariable Long projectId)
     {
-        return calculationService.getCalculations();
-    }
+        Project project = projectService.getProject(projectId);
 
-    @GetMapping(value = "/{calculationId}")
-    public Calculation getCalculation(@PathVariable Long calculationId)
-    {
-        return calculationService.getCalculation(calculationId);
+        return calculationService.getCalculations(project);
     }
 
     @PostMapping(value = "")
-    public Long addCalculation(@RequestBody @Valid Calculation calculation)
+    public Long addCalculation(@PathVariable Long projectId, @RequestBody @Valid Calculation calculation)
     {
-        calculationService.addCalculation(calculation);
+        Project project = projectService.getProject(projectId);
+
+        calculationService.addCalculation(project, calculation);
 
         return calculation.getId();
     }
 
-    @PutMapping(value = "/{calculationId}")
-    public void updateCalculation(@PathVariable Long calculationId, @RequestBody Calculation calculation)
+    @GetMapping(value = "/{calculationId}")
+    public Calculation getCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
-        calculationService.updateCalculation(calculationId, calculation);
+        Project project = projectService.getProject(projectId);
+
+        return calculationService.getCalculation(project, calculationId);
+    }
+
+    @PutMapping(value = "/{calculationId}")
+    public void updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
+    {
+        Project project = projectService.getProject(projectId);
+
+        calculationService.updateCalculation(project, calculationId, calculation);
     }
 
     @DeleteMapping(value = "/{calculationId}")
-    public void updateCalculation(@PathVariable Long calculationId)
+    public void updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
-        calculationService.deleteCalculation(calculationId);
+        Project project = projectService.getProject(projectId);
+
+        calculationService.deleteCalculation(project, calculationId);
     }
 
     @GetMapping(value = "/{calculationId}/calculate")

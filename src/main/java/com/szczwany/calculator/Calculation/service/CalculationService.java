@@ -1,14 +1,17 @@
 package com.szczwany.calculator.Calculation.service;
 
+import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.repository.ICalculationRepository;
+import com.szczwany.calculator.Project.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.sql.Date;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -23,53 +26,80 @@ public class CalculationService implements ICalculationService
     }
 
     @Override
-    public List<Calculation> getCalculations()
+    public List<Calculation> getCalculations(Project project)
     {
-        List<Calculation> calculations = new ArrayList<>();
-
-        iCalculationRepository.findAll().forEach(calculations::add);
-
-        return calculations;
+        return iCalculationRepository.findByProject(project);
     }
 
     @Override
-    public void addCalculation(Calculation calculation)
+    public void addCalculation(Project project, Calculation calculation)
     {
+        calculation.setProject(project);
+
         iCalculationRepository.save(calculation);
     }
 
     @Override
-    public Calculation getCalculation(Long calculationId)
+    public Calculation getCalculation(Project project, Long calculationId)
     {
-        return iCalculationRepository.findOne(calculationId);
+        return validateCalculation(project, calculationId);
     }
 
     @Override
-    public void updateCalculation(Long calculationId, Calculation calculation)
+    public void updateCalculation(Project project, Long calculationId, Calculation calculation)
     {
+        validateCalculation(project, calculationId);
+
         calculation.setId(calculationId);
+        calculation.setProject(project);
+
         iCalculationRepository.save(calculation);
     }
 
     @Override
-    public void deleteCalculation(Long calculationId)
+    public void deleteCalculation(Project project, Long calculationId)
     {
+        validateCalculation(project, calculationId);
+
         iCalculationRepository.delete(calculationId);
+    }
+
+    @Override
+    public Calculation validateCalculation(Project project, Long calculationId)
+    {
+        Calculation tempCalculation = iCalculationRepository.findOne(calculationId);
+
+        if (tempCalculation != null)
+        {
+            if(tempCalculation.getProject().getId().equals(project.getId()))
+            {
+                return tempCalculation;
+            }
+            else
+            {
+                throw new CalculationNotFoundException(calculationId, project.getId());
+            }
+        }
+        else
+        {
+            throw new CalculationNotFoundException(calculationId);
+        }
     }
 
     // todo expression value is Integer -> String, needs to be Double??
     @Override
     public String calculate(Long calculationId)
     {
-        Calculation calculation = getCalculation(calculationId);
+        Calculation calculation = iCalculationRepository.findOne(calculationId);
 
         ExpressionParser parser = new SpelExpressionParser();
         Expression exp = parser.parseExpression(calculation.getExpression());
         String result = exp.getValue().toString();
 
         calculation.setResult(result);
+        calculation.setLastUpdate(Date.from(Instant.now()));
 
-        this.updateCalculation(calculationId, calculation);
+        iCalculationRepository.save(calculation);
 
         return calculation.getResult();
     }
