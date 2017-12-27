@@ -36,6 +36,17 @@ public class Calculation
     @Column(name = "last_update")
     private Date lastUpdate;
 
+    public Calculation()
+    {
+    }
+
+    public Calculation(String description, String expression, Project project)
+    {
+        this.description = description;
+        this.expression = expression;
+        this.project = project;
+    }
+
     public Long getId()
     {
         return id;

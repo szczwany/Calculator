@@ -24,6 +24,15 @@ public class Project
     @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Calculation> calculations = new ArrayList<>();
 
+    public Project()
+    {
+    }
+
+    public Project(String name)
+    {
+        this.name = name;
+    }
+
     public Long getId()
     {
         return id;
