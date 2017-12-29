@@ -1,7 +1,10 @@
 package com.szczwany.calculator.Calculation.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.szczwany.calculator.Project.model.Project;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -9,6 +12,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "calculations")
+@JsonIgnoreProperties(value = "updatedAt", allowGetters = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Calculation
 {
     @Id
@@ -20,31 +25,25 @@ public class Calculation
     @Column(name = "description")
     private String description;
 
-    @NotBlank
+    @NotBlank(message = "You have to specify mathematical expression")
+    @Length(max = 100, message = "Maximum of 100 signs")
     @Column(name = "expression")
     private String expression;
 
     @Column(name = "result")
-    private String result;
+    private Double result;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_update")
-    private Date lastUpdate;
-
     public Calculation()
     {
-    }
-
-    public Calculation(String description, String expression, Project project)
-    {
-        this.description = description;
-        this.expression = expression;
-        this.project = project;
     }
 
     public Long getId()
@@ -77,14 +76,19 @@ public class Calculation
         this.expression = expression;
     }
 
-    public String getResult()
+    public Double getResult()
     {
         return result;
     }
 
-    public void setResult(String result)
+    public void setResult(Double result)
     {
         this.result = result;
+    }
+
+    public Date getLastUpdate()
+    {
+        return updatedAt;
     }
 
     public Project getProject()
@@ -95,15 +99,5 @@ public class Calculation
     public void setProject(Project project)
     {
         this.project = project;
-    }
-
-    public Date getLastUpdate()
-    {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(Date lastUpdate)
-    {
-        this.lastUpdate = lastUpdate;
     }
 }

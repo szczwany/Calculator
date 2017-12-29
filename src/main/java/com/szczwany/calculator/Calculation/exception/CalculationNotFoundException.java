@@ -8,11 +8,6 @@ public class CalculationNotFoundException extends RuntimeException
 {
     public CalculationNotFoundException(Long calculationId)
     {
-        super("Calculation id: " + calculationId + " could not be found!");
-    }
-
-    public CalculationNotFoundException(Long calculationId, Long projectId)
-    {
-        super("Calculation id: " + calculationId + " could not be found in project id: " + projectId);
+        super("Calculation '" + calculationId + "' does not exist");
     }
 }

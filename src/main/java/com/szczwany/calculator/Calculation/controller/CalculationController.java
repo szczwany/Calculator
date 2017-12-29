@@ -1,14 +1,20 @@
 package com.szczwany.calculator.Calculation.controller;
 
+import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.service.CalculationService;
-import com.szczwany.calculator.Project.model.Project;
+import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import com.szczwany.calculator.Project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/v1/projects/{projectId}/calculations")
@@ -24,51 +30,81 @@ public class CalculationController
         this.calculationService = calculationService;
     }
 
-    @GetMapping(value = "")
-    public List<Calculation> getCalculations(@PathVariable Long projectId)
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<Calculation>> getCalculations(@PathVariable Long projectId)
     {
-        Project project = projectService.getProject(projectId);
+        validateProject(projectId);
 
-        return calculationService.getCalculations(project);
+        return ResponseEntity.ok().body(calculationService.getCalculations(projectId));
     }
 
     @PostMapping(value = "")
-    public Long addCalculation(@PathVariable Long projectId, @RequestBody @Valid Calculation calculation)
+    public ResponseEntity<Long> addCalculation(@PathVariable Long projectId, @RequestBody @Valid Calculation calculation)
     {
-        Project project = projectService.getProject(projectId);
+        validateProject(projectId);
 
-        calculationService.addCalculation(project, calculation);
+        return Optional.ofNullable(calculationService.addCalculation(projectId, calculation))
+                .map(c ->
+                {
+                    URI location = ServletUriComponentsBuilder
+                            .fromCurrentRequest().path("/{calculationId}")
+                            .buildAndExpand(c.getId()).toUri();
 
-        return calculation.getId();
+                    return ResponseEntity.created(location).body(c.getId());
+                })
+                .orElseGet(() ->
+                        ResponseEntity.noContent().build());
     }
 
-    @GetMapping(value = "/{calculationId}")
-    public Calculation getCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
+    @GetMapping(value = "/{calculationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Calculation> getCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
-        Project project = projectService.getProject(projectId);
+        validateProject(projectId);
 
-        return calculationService.getCalculation(project, calculationId);
+        return Optional.ofNullable(calculationService.getCalculation(projectId, calculationId))
+                .map(c ->
+                        ResponseEntity.ok().body(c))
+                .orElseThrow(() ->
+                        new CalculationNotFoundException(calculationId));
     }
 
     @PutMapping(value = "/{calculationId}")
-    public void updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
+    public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
     {
-        Project project = projectService.getProject(projectId);
+        validateProject(projectId);
 
-        calculationService.updateCalculation(project, calculationId, calculation);
+        return Optional.ofNullable(calculationService.getCalculation(projectId, calculationId))
+                .map(c ->
+                {
+                    calculationService.updateCalculation(projectId, calculationId, calculation);
+
+                    return ResponseEntity.ok().build();
+                })
+                .orElseThrow(() ->
+                        new CalculationNotFoundException(calculationId));
     }
 
     @DeleteMapping(value = "/{calculationId}")
-    public void updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
+    public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
-        Project project = projectService.getProject(projectId);
+        validateProject(projectId);
 
-        calculationService.deleteCalculation(project, calculationId);
+        return Optional.ofNullable(calculationService.getCalculation(projectId, calculationId))
+                .map(c ->
+                {
+                    calculationService.deleteCalculation(projectId, calculationId);
+
+                    return ResponseEntity.ok().build();
+                })
+                .orElseThrow(() ->
+                        new CalculationNotFoundException(calculationId));
     }
 
-    @GetMapping(value = "/{calculationId}/calculate")
-    public String calculate(@PathVariable Long calculationId)
+    private void validateProject(Long projectId)
     {
-        return calculationService.calculate(calculationId);
+        if(projectService.getProject(projectId) == null)
+        {
+            throw new ProjectNotFoundException(projectId);
+        }
     }
 }
