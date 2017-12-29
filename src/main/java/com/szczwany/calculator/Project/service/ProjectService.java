@@ -42,11 +42,11 @@ public class ProjectService implements IProjectService
     }
 
     @Override
-    public void updateProject(Long projectId, Project newProject)
+    public void updateProject(Long projectId, Project project)
     {
-        newProject.setId(projectId);
+        project.setId(projectId);
 
-        iProjectRepository.save(newProject);
+        iProjectRepository.save(project);
     }
 
     @Override

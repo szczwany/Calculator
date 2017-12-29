@@ -34,16 +34,16 @@ public class ProjectController
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Long> addProject(@RequestBody @Valid Project newProject)
+    public ResponseEntity<Long> addProject(@RequestBody @Valid Project project)
     {
-        return Optional.ofNullable(projectService.addProject(newProject))
-                .map(project ->
+        return Optional.ofNullable(projectService.addProject(project))
+                .map(p ->
                         {
                             URI location = ServletUriComponentsBuilder
                                     .fromCurrentRequest().path("/{id}")
-                                    .buildAndExpand(project.getId()).toUri();
+                                    .buildAndExpand(p.getId()).toUri();
 
-                            return ResponseEntity.created(location).body(project.getId());
+                            return ResponseEntity.created(location).body(p.getId());
                         })
                 .orElseGet(() ->
                         ResponseEntity.noContent().build());
@@ -60,12 +60,12 @@ public class ProjectController
     }
 
     @PutMapping(value = "/{projectId}")
-    public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody @Valid Project newProject)
+    public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody @Valid Project project)
     {
         return Optional.ofNullable(projectService.getProject(projectId))
-                .map(project ->
+                .map(p ->
                 {
-                    projectService.updateProject(projectId, newProject);
+                    projectService.updateProject(projectId, project);
 
                     return ResponseEntity.ok().build();
                 })
