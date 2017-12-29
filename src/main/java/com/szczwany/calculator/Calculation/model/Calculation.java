@@ -88,9 +88,14 @@ public class Calculation
         this.result = result;
     }
 
-    public Date getLastUpdate()
+    public Date getUpdatedAt()
     {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt)
+    {
+        this.updatedAt = updatedAt;
     }
 
     public Project getProject()
