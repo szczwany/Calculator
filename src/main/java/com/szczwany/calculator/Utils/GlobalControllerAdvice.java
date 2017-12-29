@@ -4,6 +4,7 @@ import com.szczwany.calculator.Calculation.exception.CalculationNotFoundExceptio
 import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,5 +34,17 @@ public class GlobalControllerAdvice
         apiError.setError(e.getClass().getSimpleName());
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiError> methodNotSupported(HttpRequestMethodNotSupportedException e)
+    {
+        ApiError apiError = new ApiError();
+        apiError.setErrorCode(HttpStatus.METHOD_NOT_ALLOWED.toString());
+        apiError.setErrorMessage(e.getMessage());
+        apiError.setErrorStatus(HttpStatus.METHOD_NOT_ALLOWED);
+        apiError.setError(e.getClass().getSimpleName());
+
+        return new ResponseEntity<>(apiError, HttpStatus.METHOD_NOT_ALLOWED);
     }
 }

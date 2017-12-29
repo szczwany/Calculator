@@ -1,5 +1,6 @@
 package com.szczwany.calculator.Calculation.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,14 +26,15 @@ public class Calculation
     @Column(name = "description")
     private String description;
 
-    @NotBlank(message = "You have to specify mathematical expression")
-    @Length(max = 100, message = "Maximum of 100 signs")
+    @NotBlank
+    @Length(max = 100)
     @Column(name = "expression")
     private String expression;
 
     @Column(name = "result")
     private Double result;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
