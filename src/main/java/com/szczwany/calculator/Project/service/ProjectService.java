@@ -1,6 +1,5 @@
 package com.szczwany.calculator.Project.service;
 
-import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.repository.IProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,46 +30,28 @@ public class ProjectService implements IProjectService
     }
 
     @Override
-    public void addProject(Project project)
+    public Project addProject(Project project)
     {
-        iProjectRepository.save(project);
+        return iProjectRepository.save(project);
     }
 
     @Override
     public Project getProject(Long projectId)
     {
-        return validateProject(projectId);
+        return iProjectRepository.findOne(projectId);
     }
 
     @Override
     public void updateProject(Long projectId, Project newProject)
     {
-        validateProject(projectId);
-
         newProject.setId(projectId);
+
         iProjectRepository.save(newProject);
     }
 
     @Override
     public void deleteProject(Long projectId)
     {
-        validateProject(projectId);
-
         iProjectRepository.delete(projectId);
-    }
-
-    @Override
-    public Project validateProject(Long projectId)
-    {
-        Project tempProject = iProjectRepository.findOne(projectId);
-
-        if (tempProject != null)
-        {
-            return tempProject;
-        }
-        else
-        {
-            throw new ProjectNotFoundException(projectId);
-        }
     }
 }

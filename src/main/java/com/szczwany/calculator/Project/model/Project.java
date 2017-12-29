@@ -4,7 +4,6 @@ import com.szczwany.calculator.Calculation.model.Calculation;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,17 +19,11 @@ public class Project
     @Column(name = "name")
     private String name;
 
-    //@JsonIgnore
-    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Calculation> calculations = new ArrayList<>();
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
+    private List<Calculation> calculations;
 
     public Project()
     {
-    }
-
-    public Project(String name)
-    {
-        this.name = name;
     }
 
     public Long getId()
@@ -56,10 +49,5 @@ public class Project
     public List<Calculation> getCalculations()
     {
         return calculations;
-    }
-
-    public void setCalculations(List<Calculation> calculations)
-    {
-        this.calculations = calculations;
     }
 }
