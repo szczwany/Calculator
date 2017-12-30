@@ -3,11 +3,11 @@ package com.szczwany.calculator.Calculation.model;
 import com.fasterxml.jackson.annotation.*;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Utils.Globals;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -22,13 +22,13 @@ public class Calculation
     private Long id;
 
     @NotBlank
-    @Length(max = 100)
+    @Size(max = 100)
     @Column(name = "description")
     private String description;
 
     @NotBlank
     @Pattern(regexp = Globals.MATH_EXPRESSION_REGEX)
-    @Length(max = 100)
+    @Size(max = 100)
     @Column(name = "expression")
     private String expression;
 

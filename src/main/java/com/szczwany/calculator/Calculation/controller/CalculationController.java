@@ -7,6 +7,7 @@ import com.szczwany.calculator.Project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -14,7 +15,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
 
-@RestController
+@Controller
 @RequestMapping(value = "/v1/projects/{projectId}/calculations")
 public class CalculationController
 {
