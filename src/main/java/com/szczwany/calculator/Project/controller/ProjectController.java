@@ -1,6 +1,5 @@
 package com.szczwany.calculator.Project.controller;
 
-import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/v1/projects")
@@ -30,60 +28,51 @@ public class ProjectController
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Project>> getProjects()
     {
-        return ResponseEntity.ok().body(projectService.getProjects());
+        Collection<Project> projects = projectService.getProjects();
+
+        if ( projects.isEmpty() )
+        {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok().body(projects);
     }
 
     @PostMapping(value = "")
     public ResponseEntity<Long> addProject(@RequestBody @Valid Project project)
     {
-        return Optional.ofNullable(projectService.addProject(project))
-                .map(p ->
-                        {
-                            URI location = ServletUriComponentsBuilder
-                                    .fromCurrentRequest().path("/{id}")
-                                    .buildAndExpand(p.getId()).toUri();
+        Project newProject = projectService.addProject(project);
 
-                            return ResponseEntity.created(location).body(p.getId());
-                        })
-                .orElseGet(() ->
-                        ResponseEntity.noContent().build());
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{projectId}")
+                .buildAndExpand(newProject.getId()).toUri();
+
+        return ResponseEntity.created(location).body(newProject.getId());
     }
 
     @GetMapping(value = "/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Project> getProject(@PathVariable Long projectId)
     {
-        return Optional.ofNullable(projectService.getProject(projectId))
-                .map(project ->
-                        ResponseEntity.ok().body(project))
-                .orElseThrow(() ->
-                        new ProjectNotFoundException(projectId));
+        Project project = projectService.getProject(projectId);
+
+        return ResponseEntity.ok().body(project);
     }
 
     @PutMapping(value = "/{projectId}")
     public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody @Valid Project project)
     {
-        return Optional.ofNullable(projectService.getProject(projectId))
-                .map(p ->
-                {
-                    projectService.updateProject(projectId, project);
+        projectService.getProject(projectId);
+        projectService.updateProject(projectId, project);
 
-                    return ResponseEntity.ok().build();
-                })
-                .orElseThrow(() ->
-                        new ProjectNotFoundException(projectId));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable Long projectId)
     {
-        return Optional.ofNullable(projectService.getProject(projectId))
-                .map(project ->
-                {
-                    projectService.deleteProject(projectId);
+        projectService.getProject(projectId);
+        projectService.deleteProject(projectId);
 
-                    return ResponseEntity.ok().build();
-                })
-                .orElseThrow(() ->
-                        new ProjectNotFoundException(projectId));
+        return ResponseEntity.ok().build();
     }
 }

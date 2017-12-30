@@ -1,63 +1,61 @@
 package com.szczwany.calculator.Calculation.service;
 
+import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.repository.ICalculationRepository;
 import com.szczwany.calculator.Project.model.Project;
-import com.szczwany.calculator.Project.repository.IProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CalculationService implements ICalculationService
 {
-    private IProjectRepository iProjectRepository;
-    private ICalculationRepository iCalculationRepository;
+    private ICalculationRepository calculationRepository;
 
     @Autowired
-    public CalculationService(IProjectRepository iProjectRepository, ICalculationRepository iCalculationRepository)
+    public CalculationService(ICalculationRepository calculationRepository)
     {
-        this.iProjectRepository = iProjectRepository;
-        this.iCalculationRepository = iCalculationRepository;
+        this.calculationRepository = calculationRepository;
     }
 
     @Override
-    public List<Calculation> getCalculations(Long projectId)
+    public List<Calculation> getCalculations(Project project)
     {
-        return iCalculationRepository.findByProjectId(projectId);
+        return calculationRepository.findByProject(project);
     }
 
     @Override
-    public Calculation addCalculation(Long projectId, Calculation calculation)
+    public Calculation addCalculation(Project project, Calculation calculation)
     {
-        Project project = iProjectRepository.findOne(projectId);
-
         calculation.setProject(project);
 
-        return iCalculationRepository.save(calculation);
+        return calculationRepository.save(calculation);
     }
 
     @Override
-    public Calculation getCalculation(Long projectId, Long calculationId)
+    public Calculation getCalculation(Project project, Long calculationId)
     {
-        return iCalculationRepository.findByProjectIdAndId(projectId, calculationId);
+        return Optional.ofNullable(calculationRepository.findByProjectAndId(project, calculationId))
+                .orElseThrow(() ->
+                        new CalculationNotFoundException(calculationId));
     }
 
     @Override
-    public void updateCalculation(Long projectId, Long calculationId, Calculation calculation)
+    public void updateCalculation(Project project, Long calculationId, Calculation calculation)
     {
-        Project project = iProjectRepository.findOne(projectId);
-
+        getCalculation(project, calculationId);
         calculation.setId(calculationId);
         calculation.setProject(project);
-
-        iCalculationRepository.save(calculation);
+        calculationRepository.save(calculation);
     }
 
     @Override
-    public void deleteCalculation(Long projectId, Long calculationId)
+    public void deleteCalculation(Project project, Long calculationId)
     {
-        iCalculationRepository.delete(calculationId);
+        getCalculation(project, calculationId);
+        calculationRepository.delete(calculationId);
     }
 }
