@@ -19,6 +19,14 @@ public class ApiError
         this.timeStamp = new Date();
     }
 
+    public void initializeErrorData(HttpStatus status, Exception exception)
+    {
+        this.setErrorCode(status.toString());
+        this.setErrorMessage(exception.getMessage());
+        this.setErrorStatus(status);
+        this.setError(exception.getClass().getSimpleName());
+    }
+
     public Date getTimeStamp()
     {
         return timeStamp;

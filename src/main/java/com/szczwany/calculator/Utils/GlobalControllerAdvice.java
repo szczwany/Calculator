@@ -8,6 +8,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class GlobalControllerAdvice
@@ -16,35 +17,26 @@ public class GlobalControllerAdvice
     ResponseEntity<ApiError> handleNotFound(Exception e)
     {
         ApiError apiError = new ApiError();
-        apiError.setErrorCode(HttpStatus.NOT_FOUND.toString());
-        apiError.setErrorMessage(e.getMessage());
-        apiError.setErrorStatus(HttpStatus.NOT_FOUND);
-        apiError.setError(e.getClass().getSimpleName());
+        apiError.initializeErrorData(HttpStatus.NOT_FOUND, e);
 
-        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(apiError, apiError.getErrorStatus());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> invalidInput(MethodArgumentNotValidException e)
     {
         ApiError apiError = new ApiError();
-        apiError.setErrorCode(HttpStatus.BAD_REQUEST.toString());
-        apiError.setErrorMessage(e.getMessage());
-        apiError.setErrorStatus(HttpStatus.BAD_REQUEST);
-        apiError.setError(e.getClass().getSimpleName());
+        apiError.initializeErrorData(HttpStatus.BAD_REQUEST, e);
 
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(apiError, apiError.getErrorStatus());
     }
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ApiError> methodNotSupported(HttpRequestMethodNotSupportedException e)
     {
         ApiError apiError = new ApiError();
-        apiError.setErrorCode(HttpStatus.METHOD_NOT_ALLOWED.toString());
-        apiError.setErrorMessage(e.getMessage());
-        apiError.setErrorStatus(HttpStatus.METHOD_NOT_ALLOWED);
-        apiError.setError(e.getClass().getSimpleName());
+        apiError.initializeErrorData(HttpStatus.METHOD_NOT_ALLOWED, e);
 
-        return new ResponseEntity<>(apiError, HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity<>(apiError, apiError.getErrorStatus());
     }
 }
