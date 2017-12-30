@@ -33,7 +33,7 @@ public class CalculationController
     public ResponseEntity<Collection<Calculation>> getCalculations(@PathVariable Long projectId)
     {
         Project project = projectService.getProject(projectId);
-        Collection<Calculation> calculations = calculationService.getCalculations(project);
+        Collection<Calculation> calculations = calculationService.getCalculationsByProject(project);
 
         if( calculations.isEmpty() )
         {

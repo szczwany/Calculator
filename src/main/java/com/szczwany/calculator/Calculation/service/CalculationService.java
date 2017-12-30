@@ -7,6 +7,7 @@ import com.szczwany.calculator.Project.model.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +23,16 @@ public class CalculationService implements ICalculationService
     }
 
     @Override
-    public List<Calculation> getCalculations(Project project)
+    public List<Calculation> getCalculations()
+    {
+        List<Calculation> calculations = new ArrayList<>();
+        calculationRepository.findAll().forEach(calculations::add);
+
+        return calculations;
+    }
+
+    @Override
+    public List<Calculation> getCalculationsByProject(Project project)
     {
         return calculationRepository.findByProject(project);
     }
