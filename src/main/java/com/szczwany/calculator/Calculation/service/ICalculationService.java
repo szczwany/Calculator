@@ -9,8 +9,8 @@ public interface ICalculationService
 {
     List<Calculation> getCalculations();
     List<Calculation> getCalculationsByProject(Project project);
-    Calculation addCalculation(Project project, Calculation calculation);
+    void addCalculation(Calculation calculation);
     Calculation getCalculation(Project project, Long calculationId);
-    void updateCalculation(Project project, Long calculationId, Calculation calculation);
+    void updateCalculation(Calculation calculation);
     void deleteCalculation(Project project, Long calculationId);
 }

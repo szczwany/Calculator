@@ -30,24 +30,20 @@ public class ProjectController
     {
         Collection<Project> projects = projectService.getProjects();
 
-        if ( projects.isEmpty() )
-        {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok().body(projects);
+        return projects.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(projects);
     }
 
     @PostMapping(value = "")
     public ResponseEntity<Long> addProject(@RequestBody @Valid Project project)
     {
-        Project newProject = projectService.addProject(project);
+        projectService.addProject(project);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{projectId}")
-                .buildAndExpand(newProject.getId()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{projectId}")
+                .buildAndExpand(project.getId())
+                .toUri();
 
-        return ResponseEntity.created(location).body(newProject.getId());
+        return ResponseEntity.created(location).body(project.getId());
     }
 
     @GetMapping(value = "/{projectId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,7 +58,8 @@ public class ProjectController
     public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody @Valid Project project)
     {
         projectService.getProject(projectId);
-        projectService.updateProject(projectId, project);
+        project.setId(projectId);
+        projectService.updateProject(project);
 
         return ResponseEntity.ok().build();
     }

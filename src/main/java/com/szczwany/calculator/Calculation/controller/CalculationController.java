@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/v1/projects/{projectId}/calculations")
@@ -35,25 +36,21 @@ public class CalculationController
         Project project = projectService.getProject(projectId);
         Collection<Calculation> calculations = calculationService.getCalculationsByProject(project);
 
-        if( calculations.isEmpty() )
-        {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok().body(calculations);
+        return calculations.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(calculations);
     }
 
     @PostMapping(value = "")
     public ResponseEntity<Long> addCalculation(@PathVariable Long projectId, @RequestBody @Valid Calculation calculation)
     {
         Project project = projectService.getProject(projectId);
-        Calculation newCalculation = calculationService.addCalculation(project, calculation);
+        calculation.setProject(project);
+        calculationService.addCalculation(calculation);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{calculationId}")
-                .buildAndExpand(newCalculation.getId()).toUri();
+                .buildAndExpand(calculation.getId()).toUri();
 
-        return ResponseEntity.created(location).body(newCalculation.getId());
+        return ResponseEntity.created(location).body(calculation.getId());
     }
 
     @GetMapping(value = "/{calculationId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,13 +66,15 @@ public class CalculationController
     public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
     {
         Project project = projectService.getProject(projectId);
-        calculationService.updateCalculation(project, calculationId, calculation);
+        calculation.setId(calculationId);
+        calculation.setProject(project);
+        calculationService.updateCalculation(calculation);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping(value = "/{calculationId}")
-    public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
+    public ResponseEntity<?> deleteCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
         calculationService.deleteCalculation(project, calculationId);

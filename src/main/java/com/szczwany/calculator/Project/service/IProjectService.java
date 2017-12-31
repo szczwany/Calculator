@@ -7,8 +7,8 @@ import java.util.List;
 public interface IProjectService
 {
     List<Project> getProjects();
-    Project addProject(Project project);
+    void addProject(Project project);
     Project getProject(Long projectId);
-    void updateProject(Long projectId, Project project);
+    void updateProject(Project project);
     void deleteProject(Long projectId);
 }

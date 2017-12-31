@@ -38,11 +38,9 @@ public class CalculationService implements ICalculationService
     }
 
     @Override
-    public Calculation addCalculation(Project project, Calculation calculation)
+    public void addCalculation(Calculation calculation)
     {
-        calculation.setProject(project);
-
-        return calculationRepository.save(calculation);
+        calculationRepository.save(calculation);
     }
 
     @Override
@@ -54,11 +52,9 @@ public class CalculationService implements ICalculationService
     }
 
     @Override
-    public void updateCalculation(Project project, Long calculationId, Calculation calculation)
+    public void updateCalculation(Calculation calculation)
     {
-        getCalculation(project, calculationId);
-        calculation.setId(calculationId);
-        calculation.setProject(project);
+        getCalculation(calculation.getProject(), calculation.getId());
         calculationRepository.save(calculation);
     }
 
