@@ -54,7 +54,7 @@ public class ProjectServiceTests
         Project project = ProjectFactory.createProject();
         when(projectRepository.findOne(project.getId())).thenReturn(project);
 
-        assertThat(projectService.getProject(project.getId()).getName()).isEqualTo("Test name");
+        assertThat(projectService.getProject(project.getId()).getName()).isEqualTo(project.getName());
     }
 
     @Test(expected = ProjectNotFoundException.class)
