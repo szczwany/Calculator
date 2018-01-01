@@ -5,16 +5,17 @@ import com.szczwany.calculator.Project.model.Project;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public final class ProjectFactory
 {
-    public static Collection<Project> createProjects(int number)
+    public static List<Project> createProjects(int number)
     {
         Project project = new Project();
         project.setName("Test name");
         project.setId(13L);
 
-        Collection<Project> projects = new ArrayList<>();
+        List<Project> projects = new ArrayList<>();
 
         if( number > 1 )
         {

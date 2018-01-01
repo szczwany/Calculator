@@ -1,5 +1,10 @@
 package com.szczwany.calculator.Project;
 
+import com.szczwany.calculator.Utils.GlobalControllerAdvice;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szczwany.calculator.Helpers.ProjectFactory;
@@ -7,28 +12,24 @@ import com.szczwany.calculator.Project.controller.ProjectController;
 import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
-import com.szczwany.calculator.Utils.GlobalControllerAdvice;
 import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
+
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
@@ -41,14 +42,11 @@ public class ProjectControllerTests
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private LocalValidatorFactoryBean validator;
-
     @MockBean
     private ProjectService projectService;
 
     @Before
-    public void setup()
+    public void setUp()
     {
         ProjectController projectController = new ProjectController(projectService);
         this.mockMvc = standaloneSetup(projectController)
@@ -59,33 +57,27 @@ public class ProjectControllerTests
     @Test
     public void givenProject_whenGetProjects_thenWillReturnStatusOkAndProjectName() throws Exception
     {
-        Project project = new Project();
-        project.setName("name");
-
-        List<Project> projects = Collections.singletonList(project);
+        List<Project> projects = ProjectFactory.createProjects(1);
 
         given(projectService.getProjects()).willReturn(projects);
 
         mockMvc.perform(get(Globals.PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", is(project.getName())));
+                .andExpect(jsonPath("$[0].name", is(projects.get(0).getName())));
     }
 
     @Test
     public void givenProjects_whenGetProjects_thenWillReturnStatusOkAndProjectsSize() throws Exception
     {
-        Project project = new Project();
-        project.setName("name");
-
-        List<Project> projects = Arrays.asList(project, project, project);
+        List<Project> projects = ProjectFactory.createProjects(3);
 
         given(projectService.getProjects()).willReturn(projects);
 
         mockMvc.perform(get(Globals.PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(projects.size())));
     }
 
     @Test
@@ -178,11 +170,6 @@ public class ProjectControllerTests
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjToJson(project)))
                 .andExpect(status().isOk());
-
-        // todo verify doesnt work ?
-        //verify(projectService, times(1)).getProject(project.getId());
-        //verify(projectService, times(1)).updateProject(project);
-        //verifyNoMoreInteractions(projectService);
     }
 
     @Test
@@ -210,9 +197,6 @@ public class ProjectControllerTests
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjToJson(project)))
                 .andExpect(status().isNotFound());
-
-        verify(projectService, times(1)).getProject(project.getId());
-        verifyNoMoreInteractions(projectService);
     }
 
     @Test
@@ -225,10 +209,6 @@ public class ProjectControllerTests
 
         mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId()))
                 .andExpect(status().isOk());
-
-        verify(projectService, times(1)).getProject(project.getId());
-        verify(projectService, times(1)).deleteProject(project.getId());
-        verifyNoMoreInteractions(projectService);
     }
 
     @Test
@@ -240,9 +220,6 @@ public class ProjectControllerTests
 
         mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId()))
                 .andExpect(status().isNotFound());
-
-        verify(projectService, times(1)).getProject(project.getId());
-        verifyNoMoreInteractions(projectService);
     }
 
     private String convertObjToJson(Project project) throws JsonProcessingException
