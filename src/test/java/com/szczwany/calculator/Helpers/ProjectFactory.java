@@ -41,6 +41,14 @@ public final class ProjectFactory
         return project;
     }
 
+    public static Project createProjectWithName(String name)
+    {
+        Project project = new Project();
+        project.setName(name);
+
+        return project;
+    }
+
     public static Project createEmptyProject()
     {
         return new Project();
