@@ -98,20 +98,6 @@ public class ProjectControllerTests
     }
 
     @Test
-    public void givenProject_whenAddProject_thenExpectStatusCreatedAndId() throws Exception
-    {
-        Project project = ProjectFactory.createProject();
-
-        doNothing().when(projectService).addProject(project);
-
-        mockMvc.perform(post(Globals.PROJECTS_PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(project)))
-                .andExpect(status().isCreated())
-                .andExpect(content().string(Long.toString(project.getId())));
-    }
-
-    @Test
     public void givenEmptyProject_whenAddProject_thenExpectStatusBadRequest() throws Exception
     {
         Project project = ProjectFactory.createEmptyProject();
