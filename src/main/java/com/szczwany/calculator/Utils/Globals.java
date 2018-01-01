@@ -8,6 +8,7 @@ public final class Globals
     public static final String PROJECT_ID = "/{projectId}";
     public static final String CALCULATIONS_PATH = "/v1/projects/{projectId}/calculations";
     public static final String CALCULATION_ID = "/{calculationId}";
+    public static final String EMPTY_PATH = "";
 
     private Globals()
     {

@@ -4,6 +4,7 @@ import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.service.CalculationService;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
+import com.szczwany.calculator.Utils.Globals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Collection;
-import java.util.Optional;
 
 @Controller
-@RequestMapping(value = "/v1/projects/{projectId}/calculations")
+@RequestMapping(value = Globals.CALCULATIONS_PATH)
 public class CalculationController
 {
     private ProjectService projectService;
@@ -30,7 +30,7 @@ public class CalculationController
         this.calculationService = calculationService;
     }
 
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = Globals.EMPTY_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Calculation>> getCalculations(@PathVariable Long projectId)
     {
         Project project = projectService.getProject(projectId);
@@ -39,21 +39,22 @@ public class CalculationController
         return calculations.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(calculations);
     }
 
-    @PostMapping(value = "")
+    @PostMapping(value = Globals.EMPTY_PATH)
     public ResponseEntity<Long> addCalculation(@PathVariable Long projectId, @RequestBody @Valid Calculation calculation)
     {
         Project project = projectService.getProject(projectId);
+        calculation.setId(null);
         calculation.setProject(project);
         calculationService.addCalculation(calculation);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{calculationId}")
+                .fromCurrentRequest().path(Globals.CALCULATION_ID)
                 .buildAndExpand(calculation.getId()).toUri();
 
         return ResponseEntity.created(location).body(calculation.getId());
     }
 
-    @GetMapping(value = "/{calculationId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = Globals.CALCULATION_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Calculation> getCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
@@ -62,7 +63,7 @@ public class CalculationController
         return ResponseEntity.ok().body(calculation);
     }
 
-    @PutMapping(value = "/{calculationId}")
+    @PutMapping(value = Globals.CALCULATION_ID)
     public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
     {
         Project project = projectService.getProject(projectId);
@@ -73,7 +74,7 @@ public class CalculationController
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/{calculationId}")
+    @DeleteMapping(value = Globals.CALCULATION_ID)
     public ResponseEntity<?> deleteCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
