@@ -1,10 +1,5 @@
 package com.szczwany.calculator.Project;
 
-import com.szczwany.calculator.Utils.GlobalControllerAdvice;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szczwany.calculator.Helpers.ProjectFactory;
@@ -14,6 +9,8 @@ import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
 import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,14 +22,11 @@ import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 
 @RunWith(SpringRunner.class)
@@ -45,15 +39,6 @@ public class ProjectControllerTests
     @MockBean
     private ProjectService projectService;
 
-    @Before
-    public void setUp()
-    {
-        ProjectController projectController = new ProjectController(projectService);
-        this.mockMvc = standaloneSetup(projectController)
-                .setControllerAdvice(new GlobalControllerAdvice())
-                .build();
-    }
-
     @Test
     public void givenProject_whenGetProjects_thenWillReturnStatusOkAndProjectName() throws Exception
     {
@@ -65,6 +50,9 @@ public class ProjectControllerTests
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(projects.get(0).getName())));
+
+        verify(projectService, times(1)).getProjects();
+        verifyNoMoreInteractions(projectService);
     }
 
     @Test
@@ -78,6 +66,9 @@ public class ProjectControllerTests
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(projects.size())));
+
+        verify(projectService, times(1)).getProjects();
+        verifyNoMoreInteractions(projectService);
     }
 
     @Test
@@ -88,6 +79,9 @@ public class ProjectControllerTests
         mockMvc.perform(get(Globals.PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
+
+        verify(projectService, times(1)).getProjects();
+        verifyNoMoreInteractions(projectService);
     }
 
     @Test
