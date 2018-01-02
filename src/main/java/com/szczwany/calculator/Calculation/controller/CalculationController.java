@@ -48,13 +48,13 @@ public class CalculationController
         calculationService.addCalculation(calculation);
 
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path(Globals.CALCULATION_ID)
+                .fromCurrentRequest().path(Globals.CALCULATION_ID_PATH)
                 .buildAndExpand(calculation.getId()).toUri();
 
         return ResponseEntity.created(location).body(calculation.getId());
     }
 
-    @GetMapping(value = Globals.CALCULATION_ID, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = Globals.CALCULATION_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Calculation> getCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
@@ -63,7 +63,7 @@ public class CalculationController
         return ResponseEntity.ok().body(calculation);
     }
 
-    @PutMapping(value = Globals.CALCULATION_ID)
+    @PutMapping(value = Globals.CALCULATION_ID_PATH)
     public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
     {
         Project project = projectService.getProject(projectId);
@@ -74,7 +74,7 @@ public class CalculationController
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = Globals.CALCULATION_ID)
+    @DeleteMapping(value = Globals.CALCULATION_ID_PATH)
     public ResponseEntity<?> deleteCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);

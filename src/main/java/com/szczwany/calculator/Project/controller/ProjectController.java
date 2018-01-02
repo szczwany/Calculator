@@ -41,14 +41,14 @@ public class ProjectController
         projectService.addProject(project);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path(Globals.PROJECT_ID)
+                .path(Globals.PROJECT_ID_PATH)
                 .buildAndExpand(project.getId())
                 .toUri();
 
         return ResponseEntity.created(location).body(project.getId());
     }
 
-    @GetMapping(value = Globals.PROJECT_ID, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = Globals.PROJECT_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Project> getProject(@PathVariable Long projectId)
     {
         Project project = projectService.getProject(projectId);
@@ -56,7 +56,7 @@ public class ProjectController
         return ResponseEntity.ok().body(project);
     }
 
-    @PutMapping(value = Globals.PROJECT_ID)
+    @PutMapping(value = Globals.PROJECT_ID_PATH)
     public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody @Valid Project project)
     {
         projectService.getProject(projectId);
@@ -66,7 +66,7 @@ public class ProjectController
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = Globals.PROJECT_ID)
+    @DeleteMapping(value = Globals.PROJECT_ID_PATH)
     public ResponseEntity<?> deleteProject(@PathVariable Long projectId)
     {
         projectService.getProject(projectId);
