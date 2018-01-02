@@ -31,7 +31,7 @@ public class CalculationController
     }
 
     @GetMapping(value = Globals.EMPTY_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<Calculation>> getCalculations(@PathVariable Long projectId)
+    public ResponseEntity<Collection<Calculation>> getCalculationsByProject(@PathVariable Long projectId)
     {
         Project project = projectService.getProject(projectId);
         Collection<Calculation> calculations = calculationService.getCalculationsByProject(project);
