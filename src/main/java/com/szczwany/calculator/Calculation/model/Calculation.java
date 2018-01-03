@@ -40,7 +40,7 @@ public class Calculation
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @JsonIgnore
+    @JsonIgnore()
     @ManyToOne
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;

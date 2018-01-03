@@ -9,11 +9,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 @ControllerAdvice
 public class GlobalControllerAdvice
 {
-    @ExceptionHandler({ProjectNotFoundException.class, CalculationNotFoundException.class})
+    @ExceptionHandler({ProjectNotFoundException.class, CalculationNotFoundException.class, NoHandlerFoundException.class})
     ResponseEntity<ApiError> handleNotFound(Exception e)
     {
         ApiError apiError = new ApiError();
