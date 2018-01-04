@@ -94,8 +94,7 @@ public class ResultControllerTests
         Calculation calculation = CalculationFactory.createCalculationWithProjectAndId(project);
         given(calculationService.getCalculation(project, calculation.getId())).willReturn(calculation);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH +
-                        Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
+        mockMvc.perform(get(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
                         Globals.RESULT_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -108,9 +107,8 @@ public class ResultControllerTests
         calculation.setExpression("2-2");
         given(calculationService.getCalculation(project, calculation.getId())).willReturn(calculation);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH +
-                Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
-                Globals.RESULT_PATH, project.getId(), calculation.getId())
+        mockMvc.perform(get(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
+                        Globals.RESULT_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -118,14 +116,13 @@ public class ResultControllerTests
     @Test
     public void givenCalculationsWithMultiplyExpression_whenSetResultsByCalculation_thenReturnStatusOk() throws Exception
     {
-        Calculation calculation = new Calculation();
+        Calculation calculation = CalculationFactory.createCalculationWithProjectAndId(project);
         calculation.setId(1L);
         calculation.setDescription("Test");
         calculation.setExpression("2*2");
         given(calculationService.getCalculation(project, calculation.getId())).willReturn(calculation);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH +
-                Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
+        mockMvc.perform(get(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
                 Globals.RESULT_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -138,8 +135,7 @@ public class ResultControllerTests
         calculation.setExpression("2/2");
         given(calculationService.getCalculation(project, calculation.getId())).willReturn(calculation);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH +
-                Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
+        mockMvc.perform(get(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH +
                 Globals.RESULT_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
