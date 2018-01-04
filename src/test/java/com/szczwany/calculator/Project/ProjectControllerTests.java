@@ -28,7 +28,6 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = ProjectController.class, secure = false)
 public class ProjectControllerTests
@@ -42,7 +41,7 @@ public class ProjectControllerTests
     @Test
     public void givenProject_whenGetProjects_thenWillReturnStatusOkAndProjectName() throws Exception
     {
-        List<Project> projects = ProjectFactory.createProjects(1);
+        List<Project> projects = ProjectFactory.createProjects(Globals.NUM_OF_PROJECTS_TEST);
 
         given(projectService.getProjects()).willReturn(projects);
 
@@ -58,7 +57,7 @@ public class ProjectControllerTests
     @Test
     public void givenProjects_whenGetProjects_thenWillReturnStatusOkAndProjectsSize() throws Exception
     {
-        List<Project> projects = ProjectFactory.createProjects(3);
+        List<Project> projects = ProjectFactory.createProjects(Globals.NUM_OF_PROJECTS_TEST);
 
         given(projectService.getProjects()).willReturn(projects);
 
@@ -87,7 +86,7 @@ public class ProjectControllerTests
     @Test
     public void givenProject_whenAddProject_thenExpectStatusCreated() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         doNothing().when(projectService).addProject(project);
 
@@ -113,11 +112,11 @@ public class ProjectControllerTests
     @Test
     public void givenProjectId_whenGetProject_thenWillReturnProject() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         given(projectService.getProject(project.getId())).willReturn(project);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId())
+        mockMvc.perform(get(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(project.getId().intValue())))
@@ -128,11 +127,11 @@ public class ProjectControllerTests
     @Test
     public void givenProjectId_whenGetProject_thenWillReturnStatusNotFoundAndErrorMessage() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         when(projectService.getProject(project.getId())).thenThrow(new ProjectNotFoundException(project.getId()));
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId())
+        mockMvc.perform(get(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage", is("Project '" + project.getId() + "' does not exist")));
@@ -141,12 +140,12 @@ public class ProjectControllerTests
     @Test
     public void givenProject_whenUpdateProject_thenWillReturnStatusOk() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         when(projectService.getProject(project.getId())).thenReturn(project);
         doNothing().when(projectService).updateProject(project);
 
-        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId())
+        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjToJson(project)))
                 .andExpect(status().isOk());
@@ -155,12 +154,12 @@ public class ProjectControllerTests
     @Test
     public void givenProjectIdAndNullResponseBody_whenUpdateProject_thenWillReturnStatusBadRequest() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         when(projectService.getProject(project.getId())).thenReturn(project);
         doNothing().when(projectService).updateProject(project);
 
-        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId())
+        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjToJson(null)))
                 .andExpect(status().isBadRequest());
@@ -169,11 +168,11 @@ public class ProjectControllerTests
     @Test
     public void givenProjectId_whenUpdateProject_thenWillReturnStatusNotFound() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         when(projectService.getProject(project.getId())).thenThrow(new ProjectNotFoundException(project.getId()));
 
-        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId())
+        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertObjToJson(project)))
                 .andExpect(status().isNotFound());
@@ -182,31 +181,31 @@ public class ProjectControllerTests
     @Test
     public void givenProjectId_whenDeleteProject_thenWillReturnStatusOk() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         when(projectService.getProject(project.getId())).thenReturn(project);
         doNothing().when(projectService).deleteProject(project.getId());
 
-        mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId()))
+        mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId()))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void givenProjectId_whenDeleteProject_thenWillReturnStatusNotFound() throws Exception
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
 
         when(projectService.getProject(project.getId())).thenThrow(new ProjectNotFoundException(project.getId()));
 
-        mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID, project.getId()))
+        mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId()))
                 .andExpect(status().isNotFound());
     }
 
-    private String convertObjToJson(Project project) throws JsonProcessingException
+    private String convertObjToJson(Object obj) throws JsonProcessingException
     {
         ObjectMapper mapper = new ObjectMapper();
 
-        return mapper.writeValueAsString(project);
+        return mapper.writeValueAsString(obj);
     }
 }
 

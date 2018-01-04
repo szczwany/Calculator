@@ -6,6 +6,7 @@ import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.repository.IProjectRepository;
 import com.szczwany.calculator.Project.service.IProjectService;
 import com.szczwany.calculator.Project.service.ProjectService;
+import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,17 +32,16 @@ public class ProjectServiceTests
     }
 
     @Test
-    public void whenValidProjectsInDb_thenReturnProjectsList()
+    public void whenProjectsInDatabase_thenReturnProjects()
     {
-        final int numberOfProjects = 10;
-        List<Project> projects = ProjectFactory.createProjects(numberOfProjects);
+        List<Project> projects = ProjectFactory.createProjects(Globals.NUM_OF_PROJECTS_TEST);
         when(projectRepository.findAll()).thenReturn(projects);
 
-        assertThat(projectService.getProjects()).hasSize(numberOfProjects);
+        assertThat(projectService.getProjects()).hasSize(Globals.NUM_OF_PROJECTS_TEST);
     }
 
     @Test
-    public void whenNoProjects_thenReturnProjectsEmptyList()
+    public void whenNoProjectsInDatabase_thenReturnProjectsEmptyList()
     {
         when(projectRepository.findAll()).thenReturn(Lists.emptyList());
 
@@ -51,7 +51,7 @@ public class ProjectServiceTests
     @Test
     public void whenValidProjectId_thenProjectIsFoundWithName()
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
         when(projectRepository.findOne(project.getId())).thenReturn(project);
 
         assertThat(projectService.getProject(project.getId()).getName()).isEqualTo(project.getName());
@@ -60,16 +60,15 @@ public class ProjectServiceTests
     @Test(expected = ProjectNotFoundException.class)
     public void whenInvalidProjectId_thenProjectNotFoundException()
     {
-        final Long id = 1L;
-        when(projectRepository.findOne(id)).thenReturn(null);
+        when(projectRepository.findOne(Globals.ID_TEST)).thenReturn(null);
 
-        projectService.getProject(id);
+        projectService.getProject(Globals.ID_TEST);
     }
 
     @Test
-    public void whenValidProject_thenAddProjectToDb()
+    public void whenValidProject_thenAddProjectToDatabase()
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
         when(projectRepository.save(project)).thenReturn(project);
 
         projectService.addProject(project);
@@ -78,7 +77,7 @@ public class ProjectServiceTests
     @Test
     public void whenValidProject_thenUpdateProject()
     {
-        Project project = ProjectFactory.createProject();
+        Project project = ProjectFactory.createProjectWithId();
         when(projectRepository.save(project)).thenReturn(project);
 
         projectService.updateProject(project);
@@ -87,9 +86,8 @@ public class ProjectServiceTests
     @Test
     public void whenValidProjectId_thenDeleteProject()
     {
-        final Long id = 1L;
-        doNothing().when(projectRepository).delete(id);
+        doNothing().when(projectRepository).delete(Globals.ID_TEST);
 
-        projectService.deleteProject(id);
+        projectService.deleteProject(Globals.ID_TEST);
     }
 }

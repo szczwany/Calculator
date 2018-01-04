@@ -22,11 +22,11 @@ public class ProjectRepositoryTests
     @Autowired
     private IProjectRepository projectRepository;
 
-    // Not needed here just to test things
+    // Test
     @Test
     public void whenFindOne_thenReturnProject()
     {
-        Project project = ProjectFactory.createProjectWithName("Tescik");
+        Project project = ProjectFactory.createProject();
         entityManager.persist(project);
         entityManager.flush();
 

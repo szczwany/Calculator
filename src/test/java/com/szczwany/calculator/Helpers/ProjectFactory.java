@@ -3,17 +3,16 @@ package com.szczwany.calculator.Helpers;
 import com.szczwany.calculator.Project.model.Project;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+// TODO refactor ... -> design pattern ?
 
 public final class ProjectFactory
 {
     public static List<Project> createProjects(int number)
     {
-        Project project = new Project();
-        project.setName("Test name");
-        project.setId(13L);
+        Project project = createProject();
 
         List<Project> projects = new ArrayList<>();
 
@@ -36,15 +35,15 @@ public final class ProjectFactory
     {
         Project project = new Project();
         project.setName("Test name");
-        project.setId(13L);
 
         return project;
     }
 
-    public static Project createProjectWithName(String name)
+    public static Project createProjectWithId()
     {
         Project project = new Project();
-        project.setName(name);
+        project.setId(13L);
+        project.setName("Test name");
 
         return project;
     }
