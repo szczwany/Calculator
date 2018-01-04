@@ -66,7 +66,7 @@ public class ResultController
     {
         Double result = Calculator.calculate(calculation.getExpression());
 
-        if( result != null )
+        if(result != null)
         {
             calculation.setResult(result);
             calculation.setUpdatedAt(new Date());
@@ -76,7 +76,7 @@ public class ResultController
 
     private ResponseEntity<?> evaluateCalculations(Collection<Calculation> calculations)
     {
-        for ( Calculation calculation : calculations )
+        for (Calculation calculation : calculations)
         {
             getAndSaveCalculationResult(calculation);
         }

@@ -7,10 +7,31 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// TODO refactor ...
+// TODO refactor ... -> design pattern ?
 
 public final class CalculationFactory
 {
+    public static List<Calculation> createCalculations(int number)
+    {
+        Calculation calculation = createCalculation();
+
+        List<Calculation> calculations = new ArrayList<>();
+
+        if (number > 1)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                calculations.add(calculation);
+            }
+        }
+        else
+        {
+            calculations = Collections.singletonList(calculation);
+        }
+
+        return calculations;
+    }
+
     public static List<Calculation> createCalculations(Project project, int number)
     {
         Calculation calculation = createCalculationWithProject(project);
@@ -29,6 +50,15 @@ public final class CalculationFactory
         }
 
         return calculations;
+    }
+
+    public static Calculation createCalculation()
+    {
+        Calculation calculation = new Calculation();
+        calculation.setDescription("Test description");
+        calculation.setExpression("2+2");
+
+        return calculation;
     }
 
     public static Calculation createCalculationWithProject(Project project)
