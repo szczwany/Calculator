@@ -67,8 +67,11 @@ public class CalculationController
     public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
     {
         Project project = projectService.getProject(projectId);
+        calculationService.getCalculation(project, calculationId);
         calculation.setId(calculationId);
         calculation.setProject(project);
+        calculation.setResult(null);
+        calculation.setUpdatedAt(null);
         calculationService.updateCalculation(calculation);
 
         return ResponseEntity.ok().build();
@@ -78,6 +81,7 @@ public class CalculationController
     public ResponseEntity<?> deleteCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
+        calculationService.getCalculation(project, calculationId);
         calculationService.deleteCalculation(project, calculationId);
 
         return ResponseEntity.ok().build();

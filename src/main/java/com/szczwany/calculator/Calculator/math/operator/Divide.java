@@ -13,9 +13,10 @@ public class Divide implements IMathSign
         this.right = right;
     }
 
+    // TODO proper error handling when dividing by 0
     @Override
     public Double execute()
     {
-        return left.execute() / right.execute();
+        return right.execute() != 0 ? left.execute() / right.execute() : null;
     }
 }

@@ -53,7 +53,7 @@ public class ResultController
         return evaluateCalculations(calculations);
     }
 
-    @GetMapping(value = Globals.PROJECTS_PATH + Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH + Globals.RESULT_PATH)
+    @GetMapping(value = Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH + Globals.RESULT_PATH)
     public ResponseEntity<?> setResultsByCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
