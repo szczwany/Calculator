@@ -8,7 +8,10 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.Date;
+
+import static com.szczwany.calculator.Utils.Globals.*;
 
 @Entity
 @Table(name = "calculations")
@@ -27,7 +30,7 @@ public class Calculation
     private String description;
 
     @NotBlank
-    @Pattern(regexp = Globals.MATH_EXPRESSION_REGEX)
+    @Pattern(regexp = MATH_EXPRESSION_REGEX)
     @Size(max = 100)
     @Column(name = "expression")
     private String expression;
@@ -107,5 +110,11 @@ public class Calculation
     public void setProject(Project project)
     {
         this.project = project;
+    }
+
+    public void setResultAndUpdatedAt(Double result)
+    {
+        this.setResult(result);
+        this.setUpdatedAt(new Timestamp(System.currentTimeMillis() + ONE_HOUR_MILISECONDS));
     }
 }

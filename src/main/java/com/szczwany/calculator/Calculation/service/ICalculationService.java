@@ -12,5 +12,5 @@ public interface ICalculationService
     void addCalculation(Calculation calculation);
     Calculation getCalculation(Project project, Long calculationId);
     void updateCalculation(Calculation calculation);
-    void deleteCalculation(Project project, Long calculationId);
+    void deleteCalculation(Long calculationId);
 }

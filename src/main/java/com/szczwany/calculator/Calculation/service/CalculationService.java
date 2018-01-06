@@ -54,14 +54,12 @@ public class CalculationService implements ICalculationService
     @Override
     public void updateCalculation(Calculation calculation)
     {
-        getCalculation(calculation.getProject(), calculation.getId());
         calculationRepository.save(calculation);
     }
 
     @Override
-    public void deleteCalculation(Project project, Long calculationId)
+    public void deleteCalculation(Long calculationId)
     {
-        getCalculation(project, calculationId);
         calculationRepository.delete(calculationId);
     }
 }

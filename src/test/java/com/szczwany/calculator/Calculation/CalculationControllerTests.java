@@ -1,7 +1,5 @@
 package com.szczwany.calculator.Calculation;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szczwany.calculator.Calculation.controller.CalculationController;
 import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Calculation.model.Calculation;
@@ -10,7 +8,6 @@ import com.szczwany.calculator.Helpers.CalculationFactory;
 import com.szczwany.calculator.Helpers.ProjectFactory;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
-import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.szczwany.calculator.Helpers.ObjectConverter.convertToJson;
+import static com.szczwany.calculator.Utils.Globals.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
@@ -58,10 +57,10 @@ public class CalculationControllerTests
     @Test
     public void givenCalculations_whenGetCalculationsByProject_thenWillReturnStatusOk() throws Exception
     {
-        List<Calculation> calculations = CalculationFactory.createCalculations(project, Globals.NUM_OF_CALCULATIONS_TEST);
+        List<Calculation> calculations = CalculationFactory.createCalculations(project, NUM_OF_CALCULATIONS_TEST);
         given(calculationService.getCalculationsByProject(project)).willReturn(calculations);
 
-        mockMvc.perform(get(Globals.CALCULATIONS_PATH, project.getId())
+        mockMvc.perform(get(CALCULATIONS_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
@@ -69,13 +68,13 @@ public class CalculationControllerTests
     @Test
     public void givenCalculations_whenGetCalculationsByProject_thenWillReturnStatusOkAndExpectSize() throws Exception
     {
-        List<Calculation> calculations = CalculationFactory.createCalculations(project, Globals.NUM_OF_CALCULATIONS_TEST);
+        List<Calculation> calculations = CalculationFactory.createCalculations(project, NUM_OF_CALCULATIONS_TEST);
         given(calculationService.getCalculationsByProject(project)).willReturn(calculations);
 
-        mockMvc.perform(get(Globals.CALCULATIONS_PATH, project.getId())
+        mockMvc.perform(get(CALCULATIONS_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(Globals.NUM_OF_CALCULATIONS_TEST)));
+                .andExpect(jsonPath("$", hasSize(NUM_OF_CALCULATIONS_TEST)));
     }
 
     @Test
@@ -83,7 +82,7 @@ public class CalculationControllerTests
     {
         given(calculationService.getCalculationsByProject(project)).willReturn(Lists.emptyList());
 
-        mockMvc.perform(get(Globals.CALCULATIONS_PATH, project.getId())
+        mockMvc.perform(get(CALCULATIONS_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
@@ -95,9 +94,9 @@ public class CalculationControllerTests
 
         doNothing().when(calculationService).addCalculation(calculation);
 
-        mockMvc.perform(post(Globals.CALCULATIONS_PATH, project.getId())
+        mockMvc.perform(post(CALCULATIONS_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(calculation)))
+                .content(convertToJson(calculation)))
                 .andExpect(status().isCreated());
     }
 
@@ -108,9 +107,9 @@ public class CalculationControllerTests
 
         doNothing().when(calculationService).addCalculation(calculation);
 
-        mockMvc.perform(post(Globals.CALCULATIONS_PATH, project.getId())
+        mockMvc.perform(post(CALCULATIONS_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(calculation)))
+                .content(convertToJson(calculation)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -121,7 +120,7 @@ public class CalculationControllerTests
 
         given(calculationService.getCalculation(project, calculation.getId())).willReturn(calculation);
 
-        mockMvc.perform(get(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId())
+        mockMvc.perform(get(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(calculation.getId().intValue())))
@@ -136,7 +135,7 @@ public class CalculationControllerTests
 
         when(calculationService.getCalculation(project, calculation.getId())).thenThrow(new CalculationNotFoundException(calculation.getId()));
 
-        mockMvc.perform(get(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId())
+        mockMvc.perform(get(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage", is("Calculation '" + calculation.getId() + "' does not exist")));
@@ -150,9 +149,9 @@ public class CalculationControllerTests
         when(calculationService.getCalculation(project, calculation.getId())).thenReturn(calculation);
         doNothing().when(calculationService).updateCalculation(calculation);
 
-        mockMvc.perform(put(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId())
+        mockMvc.perform(put(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(calculation)))
+                .content(convertToJson(calculation)))
                 .andExpect(status().isOk());
     }
 
@@ -164,9 +163,9 @@ public class CalculationControllerTests
         when(calculationService.getCalculation(project, calculation.getId())).thenReturn(calculation);
         doNothing().when(calculationService).updateCalculation(calculation);
 
-        mockMvc.perform(put(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId())
+        mockMvc.perform(put(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(null)))
+                .content(convertToJson(null)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -177,9 +176,9 @@ public class CalculationControllerTests
 
         when(calculationService.getCalculation(project, calculation.getId())).thenThrow(new CalculationNotFoundException(calculation.getId()));
 
-        mockMvc.perform(put(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId())
+        mockMvc.perform(put(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(calculation)))
+                .content(convertToJson(calculation)))
                 .andExpect(status().isNotFound());
     }
 
@@ -189,9 +188,9 @@ public class CalculationControllerTests
         Calculation calculation = CalculationFactory.createCalculationWithProjectAndId(project);
 
         when(calculationService.getCalculation(project, calculation.getId())).thenReturn(calculation);
-        doNothing().when(calculationService).deleteCalculation(project, calculation.getId());
+        doNothing().when(calculationService).deleteCalculation(calculation.getId());
 
-        mockMvc.perform(delete(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId()))
+        mockMvc.perform(delete(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -202,14 +201,7 @@ public class CalculationControllerTests
 
         when(calculationService.getCalculation(project, calculation.getId())).thenThrow(new CalculationNotFoundException(calculation.getId()));
 
-        mockMvc.perform(delete(Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH, project.getId(), calculation.getId()))
+        mockMvc.perform(delete(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId()))
                 .andExpect(status().isNotFound());
-    }
-
-    private String convertObjToJson(Object obj) throws JsonProcessingException
-    {
-        ObjectMapper mapper = new ObjectMapper();
-
-        return mapper.writeValueAsString(obj);
     }
 }

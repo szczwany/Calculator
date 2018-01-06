@@ -5,7 +5,6 @@ import com.szczwany.calculator.Calculation.service.CalculationService;
 import com.szczwany.calculator.Calculator.Calculator;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
-import com.szczwany.calculator.Utils.Globals;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
+
+import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.Utils.Response.*;
 
 @Controller
 public class ResultController
@@ -28,15 +29,15 @@ public class ResultController
         this.projectService = projectService;
     }
 
-    @GetMapping(value = Globals.ALL_CALCULATIONS_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Collection<Calculation>> getCalculations()
+    @GetMapping(value = ALL_CALCULATIONS_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCalculations()
     {
         Collection<Calculation> calculations = calculationService.getCalculations();
 
-        return calculations.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok().body(calculations);
+        return calculations.isEmpty() ? noContent() : okBody(calculations);
     }
 
-    @GetMapping(value = Globals.ALL_CALCULATIONS_PATH + Globals.RESULT_PATH)
+    @GetMapping(value = ALL_CALCULATIONS_PATH + RESULT_PATH)
     public ResponseEntity<?> setResults()
     {
         Collection<Calculation> calculations = calculationService.getCalculations();
@@ -44,7 +45,7 @@ public class ResultController
         return evaluateCalculations(calculations);
     }
 
-    @GetMapping(value = Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH + Globals.RESULT_PATH)
+    @GetMapping(value = PROJECTS_PATH + PROJECT_ID_PATH + RESULT_PATH)
     public ResponseEntity<?> setResultsByProject(@PathVariable Long projectId)
     {
         Project project = projectService.getProject(projectId);
@@ -53,7 +54,7 @@ public class ResultController
         return evaluateCalculations(calculations);
     }
 
-    @GetMapping(value = Globals.CALCULATIONS_PATH + Globals.CALCULATION_ID_PATH + Globals.RESULT_PATH)
+    @GetMapping(value = CALCULATIONS_PATH + CALCULATION_ID_PATH + RESULT_PATH)
     public ResponseEntity<?> setResultsByCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
         Project project = projectService.getProject(projectId);
@@ -68,8 +69,7 @@ public class ResultController
 
         if(result != null)
         {
-            calculation.setResult(result);
-            calculation.setUpdatedAt(new Date());
+            calculation.setResultAndUpdatedAt(result);
             calculationService.updateCalculation(calculation);
         }
     }
@@ -81,6 +81,6 @@ public class ResultController
             getAndSaveCalculationResult(calculation);
         }
 
-        return ResponseEntity.ok().build();
+        return ok();
     }
 }

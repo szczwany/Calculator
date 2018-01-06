@@ -1,13 +1,10 @@
 package com.szczwany.calculator.Project;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.szczwany.calculator.Helpers.ProjectFactory;
 import com.szczwany.calculator.Project.controller.ProjectController;
 import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
-import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,13 +17,16 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.szczwany.calculator.Helpers.ObjectConverter.convertToJson;
+import static com.szczwany.calculator.Utils.Globals.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = ProjectController.class, secure = false)
@@ -41,11 +41,11 @@ public class ProjectControllerTests
     @Test
     public void givenProject_whenGetProjects_thenWillReturnStatusOkAndProjectName() throws Exception
     {
-        List<Project> projects = ProjectFactory.createProjects(Globals.NUM_OF_PROJECTS_TEST);
+        List<Project> projects = ProjectFactory.createProjects(NUM_OF_PROJECTS_TEST);
 
         given(projectService.getProjects()).willReturn(projects);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH)
+        mockMvc.perform(get(PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name", is(projects.get(0).getName())));
@@ -57,11 +57,11 @@ public class ProjectControllerTests
     @Test
     public void givenProjects_whenGetProjects_thenWillReturnStatusOkAndProjectsSize() throws Exception
     {
-        List<Project> projects = ProjectFactory.createProjects(Globals.NUM_OF_PROJECTS_TEST);
+        List<Project> projects = ProjectFactory.createProjects(NUM_OF_PROJECTS_TEST);
 
         given(projectService.getProjects()).willReturn(projects);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH)
+        mockMvc.perform(get(PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(projects.size())));
@@ -75,7 +75,7 @@ public class ProjectControllerTests
     {
         given(projectService.getProjects()).willReturn(Lists.emptyList());
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH)
+        mockMvc.perform(get(PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
@@ -90,9 +90,9 @@ public class ProjectControllerTests
 
         doNothing().when(projectService).addProject(project);
 
-        mockMvc.perform(post(Globals.PROJECTS_PATH)
+        mockMvc.perform(post(PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(project)))
+                .content(convertToJson(project)))
                 .andExpect(status().isCreated());
     }
 
@@ -103,9 +103,9 @@ public class ProjectControllerTests
 
         doNothing().when(projectService).addProject(project);
 
-        mockMvc.perform(post(Globals.PROJECTS_PATH)
+        mockMvc.perform(post(PROJECTS_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(project)))
+                .content(convertToJson(project)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -116,7 +116,7 @@ public class ProjectControllerTests
 
         given(projectService.getProject(project.getId())).willReturn(project);
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
+        mockMvc.perform(get(PROJECTS_PATH + PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(project.getId().intValue())))
@@ -131,7 +131,7 @@ public class ProjectControllerTests
 
         when(projectService.getProject(project.getId())).thenThrow(new ProjectNotFoundException(project.getId()));
 
-        mockMvc.perform(get(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
+        mockMvc.perform(get(PROJECTS_PATH + PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage", is("Project '" + project.getId() + "' does not exist")));
@@ -145,9 +145,9 @@ public class ProjectControllerTests
         when(projectService.getProject(project.getId())).thenReturn(project);
         doNothing().when(projectService).updateProject(project);
 
-        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
+        mockMvc.perform(put(PROJECTS_PATH + PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(project)))
+                .content(convertToJson(project)))
                 .andExpect(status().isOk());
     }
 
@@ -159,9 +159,9 @@ public class ProjectControllerTests
         when(projectService.getProject(project.getId())).thenReturn(project);
         doNothing().when(projectService).updateProject(project);
 
-        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
+        mockMvc.perform(put(PROJECTS_PATH + PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(null)))
+                .content(convertToJson(null)))
                 .andExpect(status().isBadRequest());
     }
 
@@ -172,9 +172,9 @@ public class ProjectControllerTests
 
         when(projectService.getProject(project.getId())).thenThrow(new ProjectNotFoundException(project.getId()));
 
-        mockMvc.perform(put(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId())
+        mockMvc.perform(put(PROJECTS_PATH + PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjToJson(project)))
+                .content(convertToJson(project)))
                 .andExpect(status().isNotFound());
     }
 
@@ -186,7 +186,7 @@ public class ProjectControllerTests
         when(projectService.getProject(project.getId())).thenReturn(project);
         doNothing().when(projectService).deleteProject(project.getId());
 
-        mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId()))
+        mockMvc.perform(delete(PROJECTS_PATH + PROJECT_ID_PATH, project.getId()))
                 .andExpect(status().isOk());
     }
 
@@ -197,15 +197,8 @@ public class ProjectControllerTests
 
         when(projectService.getProject(project.getId())).thenThrow(new ProjectNotFoundException(project.getId()));
 
-        mockMvc.perform(delete(Globals.PROJECTS_PATH + Globals.PROJECT_ID_PATH, project.getId()))
+        mockMvc.perform(delete(PROJECTS_PATH + PROJECT_ID_PATH, project.getId()))
                 .andExpect(status().isNotFound());
-    }
-
-    private String convertObjToJson(Object obj) throws JsonProcessingException
-    {
-        ObjectMapper mapper = new ObjectMapper();
-
-        return mapper.writeValueAsString(obj);
     }
 }
 

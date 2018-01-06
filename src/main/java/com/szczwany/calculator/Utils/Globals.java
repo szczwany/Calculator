@@ -12,6 +12,8 @@ public final class Globals
     public static final String EMPTY_PATH = "";
     public static final String RESULT_PATH = "/results";
 
+    public static final int ONE_HOUR_MILISECONDS = 3600000;
+
     public static final int NUM_OF_PROJECTS_TEST = 10;
     public static final int NUM_OF_CALCULATIONS_TEST = 10;
     public static final Long ID_TEST = 77L;

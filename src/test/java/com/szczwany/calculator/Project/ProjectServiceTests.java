@@ -6,7 +6,6 @@ import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.repository.IProjectRepository;
 import com.szczwany.calculator.Project.service.IProjectService;
 import com.szczwany.calculator.Project.service.ProjectService;
-import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static com.szczwany.calculator.Utils.Globals.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -34,10 +34,10 @@ public class ProjectServiceTests
     @Test
     public void whenProjectsInDatabase_thenReturnProjects()
     {
-        List<Project> projects = ProjectFactory.createProjects(Globals.NUM_OF_PROJECTS_TEST);
+        List<Project> projects = ProjectFactory.createProjects(NUM_OF_PROJECTS_TEST);
         when(projectRepository.findAll()).thenReturn(projects);
 
-        assertThat(projectService.getProjects()).hasSize(Globals.NUM_OF_PROJECTS_TEST);
+        assertThat(projectService.getProjects()).hasSize(NUM_OF_PROJECTS_TEST);
     }
 
     @Test
@@ -60,9 +60,9 @@ public class ProjectServiceTests
     @Test(expected = ProjectNotFoundException.class)
     public void whenInvalidProjectId_thenProjectNotFoundException()
     {
-        when(projectRepository.findOne(Globals.ID_TEST)).thenReturn(null);
+        when(projectRepository.findOne(ID_TEST)).thenReturn(null);
 
-        projectService.getProject(Globals.ID_TEST);
+        projectService.getProject(ID_TEST);
     }
 
     @Test
@@ -86,8 +86,8 @@ public class ProjectServiceTests
     @Test
     public void whenValidProjectId_thenDeleteProject()
     {
-        doNothing().when(projectRepository).delete(Globals.ID_TEST);
+        doNothing().when(projectRepository).delete(ID_TEST);
 
-        projectService.deleteProject(Globals.ID_TEST);
+        projectService.deleteProject(ID_TEST);
     }
 }

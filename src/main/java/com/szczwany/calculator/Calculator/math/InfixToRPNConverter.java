@@ -53,7 +53,7 @@ public class InfixToRPNConverter
 
             if (Calculator.isOperator(s))
             {
-                saveNumber(queue, number);
+                saveNumber();
 
                 while (!stack.empty() &&
                         (precedence.get(stack.peek()) >= precedence.get(s)))
@@ -70,7 +70,7 @@ public class InfixToRPNConverter
 
         if (number.length() > 0)
         {
-            saveNumber(queue, number);
+            saveNumber();
         }
 
         while (!stack.empty())
@@ -81,7 +81,7 @@ public class InfixToRPNConverter
         return queue;
     }
 
-    private void saveNumber(Stack<String> queue, StringBuilder number)
+    private void saveNumber()
     {
         queue.push(number.toString());
         number.setLength(0);

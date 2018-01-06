@@ -8,7 +8,6 @@ import com.szczwany.calculator.Calculation.service.ICalculationService;
 import com.szczwany.calculator.Helpers.CalculationFactory;
 import com.szczwany.calculator.Helpers.ProjectFactory;
 import com.szczwany.calculator.Project.model.Project;
-import com.szczwany.calculator.Utils.Globals;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
+import static com.szczwany.calculator.Utils.Globals.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -40,10 +40,10 @@ public class CalculationServiceTests
     @Test
     public void whenValidCalculationsInDatabase_thenReturnCalculations()
     {
-        List<Calculation> calculations = CalculationFactory.createCalculations(project, Globals.NUM_OF_CALCULATIONS_TEST);
+        List<Calculation> calculations = CalculationFactory.createCalculations(project, NUM_OF_CALCULATIONS_TEST);
         when(calculationRepository.findAll()).thenReturn(calculations);
 
-        assertThat(calculationService.getCalculations()).hasSize(Globals.NUM_OF_CALCULATIONS_TEST);
+        assertThat(calculationService.getCalculations()).hasSize(NUM_OF_CALCULATIONS_TEST);
     }
 
     @Test
@@ -57,10 +57,10 @@ public class CalculationServiceTests
     @Test
     public void whenValidCalculationsByProjectInDatabase_thenReturnCalculationsByProject()
     {
-        List<Calculation> calculations = CalculationFactory.createCalculations(project, Globals.NUM_OF_CALCULATIONS_TEST);
+        List<Calculation> calculations = CalculationFactory.createCalculations(project, NUM_OF_CALCULATIONS_TEST);
         when(calculationRepository.findByProject(project)).thenReturn(calculations);
 
-        assertThat(calculationService.getCalculationsByProject(project)).hasSize(Globals.NUM_OF_CALCULATIONS_TEST);
+        assertThat(calculationService.getCalculationsByProject(project)).hasSize(NUM_OF_CALCULATIONS_TEST);
     }
 
     @Test
@@ -84,9 +84,9 @@ public class CalculationServiceTests
     @Test(expected = CalculationNotFoundException.class)
     public void whenInvalidCalculationId_thenCalculationIsFoundWithDescriptionAndExpression()
     {
-        when(calculationRepository.findByProjectAndId(project, Globals.ID_TEST)).thenReturn(null);
+        when(calculationRepository.findByProjectAndId(project, ID_TEST)).thenReturn(null);
 
-        calculationService.getCalculation(project, Globals.ID_TEST);
+        calculationService.getCalculation(project, ID_TEST);
     }
 
     @Test
@@ -117,6 +117,6 @@ public class CalculationServiceTests
         when(calculationService.getCalculation(project, calculation.getId())).thenReturn(calculation);
         doNothing().when(calculationRepository).delete(calculation.getId());
 
-        calculationService.deleteCalculation(project, calculation.getId());
+        calculationService.deleteCalculation(calculation.getId());
     }
 }
