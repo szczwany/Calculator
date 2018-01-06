@@ -12,7 +12,7 @@ Aplikacja jest dostarczona jako jar z wbudowaną bazą danych H2.
 * Zbuduj i uruchom testy ```mvn clean package```
 * Po pomyślnym zbudowaniu projektu, można uruchomić poprzez uruchomienie jar w katalogu:
 ```
-        java -jar -Dspring.profiles.active=test target/calculator-0.0.1-SNAPSHOT.jar
+        target/calculator-0.0.1-SNAPSHOT.jar
 ```
 lub z poziomu IntelliJ IDEA/Eclipse.
 
