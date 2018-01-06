@@ -10,7 +10,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static com.szczwany.calculator.Utils.Globals.TEST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -33,5 +35,11 @@ public class ProjectRepositoryTests
         Project foundProject = projectRepository.findOne(project.getId());
 
         assertThat(foundProject.getName().equals(project.getName()));
+    }
+
+    @Test
+    public void whenFindOneNotExist_thenReturnNull()
+    {
+        assertNull(projectRepository.findOne(TEST_ID));
     }
 }

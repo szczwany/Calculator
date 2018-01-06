@@ -1,0 +1,3460 @@
+{
+	"info": {
+		"name": "Calculator",
+		"_postman_id": "d112a7e3-723a-1472-f5fd-67b089f66c2f",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get projects (using base data from script data-h2.sql)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Project count is 3\"] = jsonData.length === 3;",
+							"tests[\"First project id is 1\"] = jsonData[0].id === 1;",
+							"tests[\"First project name is Simple calculations\"] = jsonData[0].name === \"Simple calculations\";",
+							"tests[\"First project has 3 calculations\"] = jsonData[0].calculations.length === 3;",
+							"",
+							"tests[\"Second project id is 2\"] = jsonData[1].id === 2;",
+							"tests[\"Second project name is Population density /km2\"] = jsonData[1].name === \"Population density /km2\";",
+							"tests[\"Second project has 4 calculations\"] = jsonData[1].calculations.length === 4;",
+							"",
+							"tests[\"Third project id is 3\"] = jsonData[2].id === 3;",
+							"tests[\"Third project name is 100 PLN in foreign currencies\"] = jsonData[2].name === \"100 PLN in foreign currencies\";",
+							"tests[\"Third project has 3 calculations\"] = jsonData[2].calculations.length === 3;",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get calculations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculations count is 10 (all from all projects)\"] = jsonData.length === 10;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/calculations/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"calculations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run results for calculations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/calculations/results",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"calculations",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "After running results all calculations have result and updated at",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculations count is 10 (all from all projects)\"] = jsonData.length === 10;",
+							"tests[\"First project result is 4)\"] = jsonData[0].result===4;",
+							"tests[\"First project updatedAt is not null)\"] = jsonData[0].updatedAt.length>0;",
+							"",
+							"tests[\"Second project result is 2773.818181818182)\"] = jsonData[1].result===2773.818181818182;",
+							"tests[\"Second project updatedAt is not null)\"] = jsonData[1].updatedAt.length>0;",
+							"",
+							"tests[\"Third project result is 10.8122)\"] = jsonData[2].result===10.8122;",
+							"tests[\"Third project updatedAt is not null)\"] = jsonData[2].updatedAt.length>0;",
+							"",
+							"tests[\"Fourth project result is 122.88112089395194)\"] = jsonData[3].result===122.88112089395194;",
+							"tests[\"Fourth project updatedAt is not null)\"] = jsonData[3].updatedAt.length>0;",
+							"",
+							"tests[\"Fifth project result is 230.42814168465102)\"] = jsonData[4].result===230.42814168465102;",
+							"tests[\"Fifth project updatedAt is not null)\"] = jsonData[4].updatedAt.length>0;",
+							"",
+							"tests[\"Sixth project result is 334.5522895875885)\"] = jsonData[5].result===334.5522895875885;",
+							"tests[\"Sixth project updatedAt is not null)\"] = jsonData[5].updatedAt.length>0;",
+							"",
+							"tests[\"Seventh project result is 143.7228842258382)\"] = jsonData[6].result===143.7228842258382;",
+							"tests[\"Seventh project updatedAt is not null)\"] = jsonData[6].updatedAt.length>0;",
+							"",
+							"tests[\"Eighth project result is 21.27659574468085)\"] = jsonData[7].result===21.27659574468085;",
+							"tests[\"Eighth project updatedAt is not null)\"] = jsonData[7].updatedAt.length>0;",
+							"",
+							"tests[\"Ninth project result is 24.038461538461537)\"] = jsonData[8].result===24.038461538461537;",
+							"tests[\"Ninth project updatedAt is not null)\"] = jsonData[8].updatedAt.length>0;",
+							"",
+							"tests[\"teenth project result is 28.98550724637681\"] = jsonData[9].result===28.98550724637681;",
+							"tests[\"teenth project updatedAt is not null)\"] = jsonData[9].updatedAt.length>0;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/calculations/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"calculations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete project with id 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete project with id 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete project with id 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get projects after deleting all",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create project without name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 0 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Project.controller.ProjectController.addProject(com.szczwany.calculator.Project.model.Project), with 1 error(s): [Field error in object 'project' on field 'name': rejected value [null]; codes [NotBlank.project.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [project.name,name]; arguments []; default message [name]]; default message [may not be empty]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"",
+							"postman.setGlobalVariable(\"project_id\",responseBody);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate result for new project without calculations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/results",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all projects after create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Project count is 2\"] = jsonData.length === 1;",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"",
+							"postman.setGlobalVariable(\"project_id_2\",responseBody);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to get a project which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '99999' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get new project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Project id is the same as in url\"] = jsonData.id.toString() === globals.project_id;",
+							"tests[\"Project name is My project\"] = jsonData.name === \"My project\";",
+							"tests[\"Calculations in project count is 0\"] = jsonData.calculations.length === 0;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try update project which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '99999' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Changed name\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try update project without name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<?> com.szczwany.calculator.Project.controller.ProjectController.updateProject(java.lang.Long,com.szczwany.calculator.Project.model.Project), with 1 error(s): [Field error in object 'project' on field 'name': rejected value [null]; codes [NotBlank.project.name,NotBlank.name,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [project.name,name]; arguments []; default message [name]]; default message [may not be empty]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update project with new name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Changed name\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get project - name changed after update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Project name is My project\"] = jsonData.name === \"Changed name\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all calculations for project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create calculation without description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'description': rejected value [null]; codes [NotBlank.calculation.description,NotBlank.description,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.description,description]; arguments []; default message [description]]; default message [may not be empty]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"expression\": \"2+3\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create calculation without expression",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [null]; codes [NotBlank.calculation.expression,NotBlank.expression,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression]]; default message [may not be empty]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"first calculation(only Addition)\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new calculation with description length 100 and expression length 100",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"postman.setGlobalVariable(\"calculation_id_addition\", responseBody);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\",\n\t\"expression\": \"1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+12\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete calculation which test length",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with description length 101",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'description': rejected value [12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901]; codes [Size.calculation.description,Size.description,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.description,description]; arguments []; default message [description],100,0]; default message [size must be between 0 and 100]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901\",\n\t\"expression\": \"1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+12\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with expression length 101",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+121]; codes [Size.calculation.expression,Size.expression,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],100,0]; default message [size must be between 0 and 100]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\",\n\t\"expression\": \"1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+121\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (double symbol {+})",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1++1]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"1++1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (double symbol {-})",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1--1]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"1--1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (double symbol {*})",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1**1]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"1**1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (double symbol {/})",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1//1]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"1//1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (unfinished operation)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1+]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"1+\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (wrong character)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [e+e]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"e+e\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to create new calculation with wrong expression (wrong symbol)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"postman.setGlobalVariable(\"test\", jsonData.errorMessage);",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message start with correct message\"] = jsonData.errorMessage.has(\"Validation failed for argument at index 1 in method: public org.springframework.http.ResponseEntity<java.lang.Long> com.szczwany.calculator.Calculation.controller.CalculationController.addCalculation(java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [1^2]; codes [Pattern.calculation.expression,Pattern.expression,Pattern.java.lang.String,Pattern]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression],[Ljavax.validation.constraints\");",
+							"tests[\"Error message has expected regex\"] = jsonData.errorMessage.has(\"((-?[0-9]+(\\\\.[0-9]{1,2})?)+[-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)+([-+*/]{1}[0-9]+(\\\\.[0-9]{1,2})?)*\");",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"desc\",\n\t\"expression\": \"1^2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create new calculation (2+3)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 201\"] = responseCode.code === 201;",
+							"",
+							"postman.setGlobalVariable(\"calculation_id_addition\", responseBody);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"first calculation(only Addition)\",\n\t\"expression\": \"2+3\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to get a calculation which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '99999' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to get a calculation from project which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '99999' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/99999/calculations/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"99999",
+						"calculations",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to get a calculation which is in other project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '\"+globals.calculation_id_addition+\"' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id_2}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id_2}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get new calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculation id is the same as in url\"] = jsonData.id.toString() === globals.calculation_id_addition;",
+							"tests[\"Description is first calculation(only Addition)\"] = jsonData.description === \"first calculation(only Addition)\";",
+							"tests[\"Expression is 2+3\"] = jsonData.expression === \"2+3\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all calculations for project after add new calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Project has 1 calculation\"] = jsonData.length === 1;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run result for new calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}/results",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get new calculation after results",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculation id is the same as in url\"] = jsonData.id.toString() === globals.calculation_id_addition;",
+							"tests[\"Description is first calculation(only Addition)\"] = jsonData.description === \"first calculation(only Addition)\";",
+							"tests[\"Expression is 2+3\"] = jsonData.expression === \"2+3\";",
+							"tests[\"Result is 5\"] = jsonData.result === 5;",
+							"tests[\"UpdatedAt is not null\"] = jsonData.updatedAt.length>0;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to update a calculation which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '99999' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"updated first calculation(only Addition)\",\n\t\"expression\": \"2+3+1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to update a calculation where project does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '99999' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"updated first calculation(only Addition)\",\n\t\"expression\": \"2+3+1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/99999/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"99999",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to update a calculation which is in other project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '\"+globals.calculation_id_addition+\"' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"updated first calculation(only Addition)\",\n\t\"expression\": \"2+3+1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id_2}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id_2}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to update without description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 2 in method: public org.springframework.http.ResponseEntity<?> com.szczwany.calculator.Calculation.controller.CalculationController.updateCalculation(java.lang.Long,java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'description': rejected value [null]; codes [NotBlank.calculation.description,NotBlank.description,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.description,description]; arguments []; default message [description]]; default message [may not be empty]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"expression\": \"2+3+1\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to update without expression",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 400\"] = jsonData.errorCode === \"400\";",
+							"tests[\"Error status is 'bad request'\"] = jsonData.errorStatus === \"BAD_REQUEST\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Validation failed for argument at index 2 in method: public org.springframework.http.ResponseEntity<?> com.szczwany.calculator.Calculation.controller.CalculationController.updateCalculation(java.lang.Long,java.lang.Long,com.szczwany.calculator.Calculation.model.Calculation), with 1 error(s): [Field error in object 'calculation' on field 'expression': rejected value [null]; codes [NotBlank.calculation.expression,NotBlank.expression,NotBlank.java.lang.String,NotBlank]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [calculation.expression,expression]; arguments []; default message [expression]]; default message [may not be empty]] \";",
+							"tests[\"Error is MethodArgumentNotValidException\"] = jsonData.error === \"MethodArgumentNotValidException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"test\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"updated first calculation(only Addition)\",\n\t\"expression\": \"1/0\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get  calculation after update (after update result and updatedAt should be cleared)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculation id is the same as in url\"] = jsonData.id.toString() === globals.calculation_id_addition;",
+							"tests[\"Description is first calculation(only Addition)\"] = jsonData.description === \"updated first calculation(only Addition)\";",
+							"tests[\"Expression is 1/0\"] = jsonData.expression === \"1/0\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate result for new calculation (1/0)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}/results",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get calculation after result",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1bc67372-6faf-4836-9d0a-815b44e9f7b3",
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculation id is the same as in url\"] = jsonData.id.toString() === globals.calculation_id_addition;",
+							"tests[\"Description is updated first calculation(only Addition)\"] = jsonData.description === \"updated first calculation(only Addition)\";",
+							"tests[\"Expression is 1/0\"] = jsonData.expression === \"1/0\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"updated first calculation\",\n\t\"expression\": \"999999999999999999999999999999999999999999999999999999999*999999999999999999999999999999999999999999\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Run result for new calculation (calculation on big numbers)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}/results",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get new calculation after calculate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculation id is the same as in url\"] = jsonData.id.toString() === globals.calculation_id_addition;",
+							"tests[\"Description is updated first calculation\"] = jsonData.description === \"updated first calculation\";",
+							"tests[\"Expression is 2+3\"] = jsonData.expression === \"999999999999999999999999999999999999999999999999999999999*999999999999999999999999999999999999999999\";",
+							"tests[\"Result is 5\"] = jsonData.result === 1.0000000000000001e+99;",
+							"tests[\"UpdatedAt is not null\"] = jsonData.updatedAt.length>0;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"description\":\"updated first calculation\",\n\t\"expression\": \"10+20*10-20/2\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Calculate result for new calculation (many mathematical activities)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}/results",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}",
+						"results"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get new calculation after calculate",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Calculation id is the same as in url\"] = jsonData.id.toString() === globals.calculation_id_addition;",
+							"tests[\"Description is updated first calculation\"] = jsonData.description === \"updated first calculation\";",
+							"tests[\"Expression is 2+3\"] = jsonData.expression === \"10+20*10-20/2\";",
+							"tests[\"Result is 5\"] = jsonData.result === 200;",
+							"tests[\"UpdatedAt is not null\"] = jsonData.updatedAt.length>0;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to delete calculation which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '99999' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to delete calculation where project does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '99999' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/99999/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"99999",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to delete calculation which is in other project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '\"+globals.calculation_id_addition+\"' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id_2}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id_2}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get  calculation after delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '\"+globals.calculation_id_addition+\"' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to delete deleted calculation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Calculation '\"+globals.calculation_id_addition+\"' does not exist\";",
+							"tests[\"Error is CalculationNotFoundException\"] = jsonData.error === \"CalculationNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}/calculations/{{calculation_id_addition}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}",
+						"calculations",
+						"{{calculation_id_addition}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to delete project which does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '99999' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/99999",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"99999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete project copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id_2}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id_2}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get a new project after deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '\"+globals.project_id+\"' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try to delete deleted project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 404\"] = responseCode.code === 404;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Error code is 404\"] = jsonData.errorCode === \"404\";",
+							"tests[\"Error status is 'not found'\"] = jsonData.errorStatus === \"NOT_FOUND\";",
+							"tests[\"Error message is correct\"] = jsonData.errorMessage === \"Project '\"+globals.project_id+\"' does not exist\";",
+							"tests[\"Error is ProjectNotFoundException\"] = jsonData.error === \"ProjectNotFoundException\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/projects/{{project_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all calculations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic Z2tyOnRlc3Q="
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"My project\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:9212/v1/calculations/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9212",
+					"path": [
+						"v1",
+						"calculations",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
