@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.szczwany.calculator.Utils.Globals.*;
+
 // TODO refactor ... -> design pattern ?
 
 public final class ProjectFactory
 {
-    private static final Long testId = 13L;
-    private static final String testName = "Test name";
-
     public static List<Project> createProjects(int elements)
     {
         Project project = createProject();
@@ -47,7 +46,7 @@ public final class ProjectFactory
     public static Project createProject()
     {
         Project project = new Project();
-        project.setName(testName);
+        project.setName(TEST_NAME);
 
         return project;
     }
@@ -55,8 +54,8 @@ public final class ProjectFactory
     public static Project createProjectWithId()
     {
         Project project = new Project();
-        project.setId(testId);
-        project.setName(testName);
+        project.setId(TEST_ID);
+        project.setName(TEST_NAME);
 
         return project;
     }

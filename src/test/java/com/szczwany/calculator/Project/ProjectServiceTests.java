@@ -60,9 +60,9 @@ public class ProjectServiceTests
     @Test(expected = ProjectNotFoundException.class)
     public void whenInvalidProjectId_thenProjectNotFoundException()
     {
-        when(projectRepository.findOne(ID_TEST)).thenReturn(null);
+        when(projectRepository.findOne(TEST_ID)).thenReturn(null);
 
-        projectService.getProject(ID_TEST);
+        projectService.getProject(TEST_ID);
     }
 
     @Test
@@ -86,8 +86,8 @@ public class ProjectServiceTests
     @Test
     public void whenValidProjectId_thenDeleteProject()
     {
-        doNothing().when(projectRepository).delete(ID_TEST);
+        doNothing().when(projectRepository).delete(TEST_ID);
 
-        projectService.deleteProject(ID_TEST);
+        projectService.deleteProject(TEST_ID);
     }
 }

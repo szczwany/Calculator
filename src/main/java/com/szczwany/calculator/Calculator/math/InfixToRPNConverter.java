@@ -6,25 +6,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
+import static com.szczwany.calculator.Utils.Globals.*;
+
 public class InfixToRPNConverter
 {
     private Map<String, Integer> precedence;
     private Stack<String> queue;
     private Stack<String> stack;
-
     private StringBuilder number;
+
     public InfixToRPNConverter()
     {
-        this.precedence = new HashMap<>();
-        precedence.put("+", 0);
-        precedence.put("-", 0);
-        precedence.put("*", 1);
-        precedence.put("/", 1);
+        initConverter();
+        initPrecedence();
+    }
 
+    private void initConverter()
+    {
+        precedence = new HashMap<>();
         queue = new Stack<>();
         stack = new Stack<>();
-
         number = new StringBuilder();
+    }
+
+    private void initPrecedence()
+    {
+        precedence.put(PLUS_SIGN, 0);
+        precedence.put(MINUS_SIGN, 0);
+        precedence.put(MULTIPLY_SIGN, 1);
+        precedence.put(DIVIDE_SIGN, 1);
     }
 
     ///
@@ -32,17 +42,17 @@ public class InfixToRPNConverter
     ///
     public Stack<String> infixToRPN(String expression)
     {
-        String[] expressionElements = expression.split("");
+        String[] elementsInExpression = expression.split("");
 
         boolean negative = false;
 
-        if (expressionElements[0].equals("-"))
+        if (elementsInExpression[0].equals(MINUS_SIGN))
         {
             number.append('-');
             negative = true;
         }
 
-        for (String s : expressionElements)
+        for (String element : elementsInExpression)
         {
             if (negative)
             {
@@ -51,20 +61,20 @@ public class InfixToRPNConverter
                 continue;
             }
 
-            if (Calculator.isOperator(s))
+            if (Calculator.isOperator(element))
             {
                 saveNumber();
 
                 while (!stack.empty() &&
-                        (precedence.get(stack.peek()) >= precedence.get(s)))
+                        (precedence.get(stack.peek()) >= precedence.get(element)))
                 {
                     queue.push(stack.pop());
                 }
 
-                stack.push(s);
+                stack.push(element);
             } else
             {
-                number.append(s);
+                number.append(element);
             }
         }
 

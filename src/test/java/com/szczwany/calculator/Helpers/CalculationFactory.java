@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.szczwany.calculator.Utils.Globals.*;
+
 // TODO refactor ... -> design pattern ?
 
 public final class CalculationFactory
 {
-    private static final Long testId = 1L;
-    private static final String testDescription = "Test description";
-    private static final String testExpression = "2+2";
+    private CalculationFactory()
+    {
+
+    }
 
     public static List<Calculation> createCalculations(int elements)
     {
@@ -67,8 +70,8 @@ public final class CalculationFactory
     public static Calculation createCalculation()
     {
         Calculation calculation = new Calculation();
-        calculation.setDescription(testDescription);
-        calculation.setExpression(testExpression);
+        calculation.setDescription(TEST_DESCRIPTION);
+        calculation.setExpression(TEST_EXPRESSION);
 
         return calculation;
     }
@@ -76,8 +79,8 @@ public final class CalculationFactory
     public static Calculation createCalculationWithProject(Project project)
     {
         Calculation calculation = new Calculation();
-        calculation.setDescription(testDescription);
-        calculation.setExpression(testExpression);
+        calculation.setDescription(TEST_DESCRIPTION);
+        calculation.setExpression(TEST_EXPRESSION);
         calculation.setProject(project);
 
         return calculation;
@@ -86,9 +89,9 @@ public final class CalculationFactory
     public static Calculation createCalculationWithProjectAndId(Project project)
     {
         Calculation calculation = new Calculation();
-        calculation.setId(testId);
-        calculation.setDescription(testDescription);
-        calculation.setExpression(testExpression);
+        calculation.setId(TEST_ID);
+        calculation.setDescription(TEST_DESCRIPTION);
+        calculation.setExpression(TEST_EXPRESSION);
         calculation.setProject(project);
 
         return calculation;

@@ -84,9 +84,9 @@ public class CalculationServiceTests
     @Test(expected = CalculationNotFoundException.class)
     public void whenInvalidCalculationId_thenCalculationIsFoundWithDescriptionAndExpression()
     {
-        when(calculationRepository.findByProjectAndId(project, ID_TEST)).thenReturn(null);
+        when(calculationRepository.findByProjectAndId(project, TEST_ID)).thenReturn(null);
 
-        calculationService.getCalculation(project, ID_TEST);
+        calculationService.getCalculation(project, TEST_ID);
     }
 
     @Test
