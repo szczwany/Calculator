@@ -142,7 +142,7 @@ public class CalculationControllerTests
     }
 
     @Test
-    public void givenCalculation_whenUpdateCalculation_thenWillReturnStatusOk() throws Exception
+    public void givenCalculation_whenUpdateCalculation_thenWillReturnStatusNoContent() throws Exception
     {
         Calculation calculation = CalculationFactory.createCalculationWithProjectAndId(project);
 
@@ -152,7 +152,7 @@ public class CalculationControllerTests
         mockMvc.perform(put(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertToJson(calculation)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -183,7 +183,7 @@ public class CalculationControllerTests
     }
 
     @Test
-    public void givenCalculationId_whenDeleteCalculation_thenWillReturnStatusOk() throws Exception
+    public void givenCalculationId_whenDeleteCalculation_thenWillReturnStatusNoContent() throws Exception
     {
         Calculation calculation = CalculationFactory.createCalculationWithProjectAndId(project);
 
@@ -191,7 +191,7 @@ public class CalculationControllerTests
         doNothing().when(calculationService).deleteCalculation(calculation.getId());
 
         mockMvc.perform(delete(CALCULATIONS_PATH + CALCULATION_ID_PATH, project.getId(), calculation.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

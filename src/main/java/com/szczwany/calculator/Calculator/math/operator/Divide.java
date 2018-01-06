@@ -9,10 +9,9 @@ public class Divide extends AbstractOperator
         super(left, right);
     }
 
-    // TODO proper error handling when dividing by 0
     @Override
     public Double execute()
     {
-        return right.execute() != 0 ? left.execute() / right.execute() : null;
+        return left.execute() / right.execute();
     }
 }

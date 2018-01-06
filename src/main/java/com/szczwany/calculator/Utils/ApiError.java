@@ -42,7 +42,7 @@ public class ApiError
         return errorCode;
     }
 
-    public void setErrorCode(String errorCode)
+    private void setErrorCode(String errorCode)
     {
         this.errorCode = errorCode;
     }
@@ -52,7 +52,7 @@ public class ApiError
         return errorStatus;
     }
 
-    public void setErrorStatus(HttpStatus errorStatus)
+    private void setErrorStatus(HttpStatus errorStatus)
     {
         this.errorStatus = errorStatus;
     }
@@ -62,7 +62,7 @@ public class ApiError
         return errorMessage;
     }
 
-    public void setErrorMessage(String errorMessage)
+    private void setErrorMessage(String errorMessage)
     {
         this.errorMessage = errorMessage;
     }
@@ -72,7 +72,7 @@ public class ApiError
         return error;
     }
 
-    public void setError(String error)
+    private void setError(String error)
     {
         this.error = error;
     }

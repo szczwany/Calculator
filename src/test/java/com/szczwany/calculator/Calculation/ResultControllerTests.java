@@ -72,24 +72,24 @@ public class ResultControllerTests
     }
 
     @Test
-    public void givenCalculations_whenSetResults_thenReturnStatusOk() throws Exception
+    public void givenCalculations_whenSetResults_thenReturnStatusNoContent() throws Exception
     {
         mockMvc.perform(get(ALL_CALCULATIONS_PATH + RESULT_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    public void givenCalculations_whenSetResultsByProject_thenReturnStatusOk() throws Exception
+    public void givenCalculations_whenSetResultsByProject_thenReturnStatusNoContent() throws Exception
     {
 
         mockMvc.perform(get(PROJECTS_PATH + PROJECT_ID_PATH + RESULT_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
-    public void givenCalculationsWithExpression_whenSetResultsByCalculation_thenReturnStatusOk() throws Exception
+    public void givenCalculationsWithExpression_whenSetResultsByCalculation_thenReturnStatusNoContent() throws Exception
     {
         Calculation calculation = CalculationFactory.createCalculationWithProjectAndId(project);
         given(calculationService.getCalculation(project, calculation.getId())).willReturn(calculation);
@@ -97,6 +97,6 @@ public class ResultControllerTests
         mockMvc.perform(get(CALCULATIONS_PATH + CALCULATION_ID_PATH +
                         RESULT_PATH, project.getId(), calculation.getId())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 }

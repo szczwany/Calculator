@@ -23,8 +23,8 @@ public class GlobalControllerAdvice
         return new ResponseEntity<>(apiError, apiError.getErrorStatus());
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> invalidInput(MethodArgumentNotValidException e)
+    @ExceptionHandler({MethodArgumentNotValidException.class, MethodArgumentTypeMismatchException.class, IllegalArgumentException.class})
+    public ResponseEntity<ApiError> invalidInput(Exception e)
     {
         ApiError apiError = new ApiError();
         apiError.initializeErrorData(HttpStatus.BAD_REQUEST, e);
@@ -32,8 +32,8 @@ public class GlobalControllerAdvice
         return new ResponseEntity<>(apiError, apiError.getErrorStatus());
     }
 
-    @ExceptionHandler({HttpRequestMethodNotSupportedException.class, MethodArgumentTypeMismatchException.class})
-    public ResponseEntity<ApiError> methodNotSupported(HttpRequestMethodNotSupportedException e)
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiError> methodNotSupported(Exception e)
     {
         ApiError apiError = new ApiError();
         apiError.initializeErrorData(HttpStatus.METHOD_NOT_ALLOWED, e);

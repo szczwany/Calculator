@@ -138,7 +138,7 @@ public class ProjectControllerTests
     }
 
     @Test
-    public void givenProject_whenUpdateProject_thenWillReturnStatusOk() throws Exception
+    public void givenProject_whenUpdateProject_thenWillReturnStatusNoContent() throws Exception
     {
         Project project = ProjectFactory.createProjectWithId();
 
@@ -148,7 +148,7 @@ public class ProjectControllerTests
         mockMvc.perform(put(PROJECTS_PATH + PROJECT_ID_PATH, project.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(convertToJson(project)))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -179,7 +179,7 @@ public class ProjectControllerTests
     }
 
     @Test
-    public void givenProjectId_whenDeleteProject_thenWillReturnStatusOk() throws Exception
+    public void givenProjectId_whenDeleteProject_thenWillReturnStatusNoContent() throws Exception
     {
         Project project = ProjectFactory.createProjectWithId();
 
@@ -187,7 +187,7 @@ public class ProjectControllerTests
         doNothing().when(projectService).deleteProject(project.getId());
 
         mockMvc.perform(delete(PROJECTS_PATH + PROJECT_ID_PATH, project.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test

@@ -66,7 +66,7 @@ public class CalculationController
         setCalculationData(calculation, project, calculationId);
         calculationService.updateCalculation(calculation);
 
-        return ok();
+        return noContent();
     }
 
     @DeleteMapping(value = CALCULATION_ID_PATH)
@@ -76,7 +76,7 @@ public class CalculationController
         calculationService.getCalculation(project, calculationId);
         calculationService.deleteCalculation(calculationId);
 
-        return ok();
+        return noContent();
     }
 
     private Project getProject(@PathVariable Long projectId)

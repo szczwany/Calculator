@@ -81,6 +81,6 @@ public class ResultController
             getAndSaveCalculationResult(calculation);
         }
 
-        return ok();
+        return noContent();
     }
 }

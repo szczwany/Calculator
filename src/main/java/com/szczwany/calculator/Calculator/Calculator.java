@@ -23,7 +23,7 @@ public final class Calculator
     {
         InfixToRPNConverter infixToRPNConverter = new InfixToRPNConverter();
 
-        if (expression == null || expression.length() == 0)
+        if (expression == null || expression.length() == 0 || !expression.matches(MATH_EXPRESSION_REGEX))
         {
             return null;
         }
@@ -42,6 +42,11 @@ public final class Calculator
             {
                 second = numbers.pop();
                 first = numbers.pop();
+
+                if(second.execute() == 0 && element.equals(DIVIDE_SIGN))
+                {
+                    throw new IllegalArgumentException("Can't divide by zero! Fix one or more expressions!");
+                }
 
                 numbers.push(getOperation(first, second, element));
             }

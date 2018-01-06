@@ -58,7 +58,7 @@ public class ProjectController
         prepareProjectData(project, projectId);
         projectService.updateProject(project);
 
-        return ok();
+        return noContent();
     }
 
     @DeleteMapping(value = PROJECT_ID_PATH)
@@ -67,7 +67,7 @@ public class ProjectController
         projectService.getProject(projectId);
         projectService.deleteProject(projectId);
 
-        return ok();
+        return noContent();
     }
 
     private void prepareProjectData(@RequestBody @Valid Project project, Long o)
