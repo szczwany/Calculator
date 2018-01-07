@@ -33,58 +33,58 @@ public class CalculationController
     @GetMapping(value = EMPTY_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCalculationsByProject(@PathVariable Long projectId)
     {
-        Project project = getProject(projectId);
+        Project project = getProjectIfExists(projectId);
         Collection<Calculation> calculations = calculationService.getCalculationsByProject(project);
 
-        return calculations.isEmpty() ? noContent() : okBody(calculations);
+        return calculations.isEmpty() ? statusNoContent() : statusOkWithBody(calculations);
     }
 
     @PostMapping(value = EMPTY_PATH)
     public ResponseEntity<Long> addCalculation(@PathVariable Long projectId, @RequestBody @Valid Calculation calculation)
     {
-        Project project = getProject(projectId);
-        setCalculationData(calculation, project, null);
+        Project project = getProjectIfExists(projectId);
+        setUpCalculationData(calculation, project, null);
         calculationService.addCalculation(calculation);
 
-        return created(CALCULATIONS_PATH, calculation.getId());
+        return statusCreated(CALCULATIONS_PATH, calculation.getId());
     }
 
     @GetMapping(value = CALCULATION_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Calculation> getCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
-        Project project = getProject(projectId);
+        Project project = getProjectIfExists(projectId);
         Calculation calculation = calculationService.getCalculation(project, calculationId);
 
-        return okBody(calculation);
+        return statusOkWithBody(calculation);
     }
 
     @PutMapping(value = CALCULATION_ID_PATH)
     public ResponseEntity<?> updateCalculation(@PathVariable Long projectId, @PathVariable Long calculationId, @RequestBody @Valid Calculation calculation)
     {
-        Project project = getProject(projectId);
+        Project project = getProjectIfExists(projectId);
         calculationService.getCalculation(project, calculationId);
-        setCalculationData(calculation, project, calculationId);
+        setUpCalculationData(calculation, project, calculationId);
         calculationService.updateCalculation(calculation);
 
-        return noContent();
+        return statusNoContent();
     }
 
     @DeleteMapping(value = CALCULATION_ID_PATH)
     public ResponseEntity<?> deleteCalculation(@PathVariable Long projectId, @PathVariable Long calculationId)
     {
-        Project project = getProject(projectId);
+        Project project = getProjectIfExists(projectId);
         calculationService.getCalculation(project, calculationId);
         calculationService.deleteCalculation(calculationId);
 
-        return noContent();
+        return statusNoContent();
     }
 
-    private Project getProject(@PathVariable Long projectId)
+    private Project getProjectIfExists(Long projectId)
     {
         return projectService.getProject(projectId);
     }
 
-    private void setCalculationData(Calculation calculation, Project project, Long id)
+    private void setUpCalculationData(Calculation calculation, Project project, Long id)
     {
         calculation.setId(id);
         calculation.setProject(project);

@@ -28,9 +28,9 @@ public class CalculatorTests
         assertEquals(null, calculate("2.22--1*3"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void whenExpressionDivideByZero_returnNull()
     {
-        calculate("2.22/0");
+        assertEquals(null, calculate("2.22/0"));
     }
 }

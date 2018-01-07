@@ -2465,7 +2465,7 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+							"tests[\"Status code is 204\"] = responseCode.code === 204;"
 						]
 					}
 				}

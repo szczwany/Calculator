@@ -16,6 +16,7 @@ public final class Globals
     public static final String RESULT_PATH = "/results";
 
     // Date
+    public static final String DATE_TIME_FORMAT = "dd-MM-yyyy HH:mm:ss";
     public static final int ONE_HOUR_MILISECONDS = 3600000;
 
     // Tests

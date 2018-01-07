@@ -45,7 +45,7 @@ public final class Calculator
 
                 if(second.execute() == 0 && element.equals(DIVIDE_SIGN))
                 {
-                    throw new IllegalArgumentException("Can't divide by zero! Fix one or more expressions!");
+                    return null;
                 }
 
                 numbers.push(getOperation(first, second, element));

@@ -2,7 +2,7 @@ package com.szczwany.calculator.Calculator.math.operator;
 
 import com.szczwany.calculator.Calculator.math.IMathSign;
 
-public class Multiply extends AbstractOperator
+public class Multiply extends Operator
 {
     public Multiply(IMathSign left, IMathSign right)
     {

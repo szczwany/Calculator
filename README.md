@@ -1,13 +1,13 @@
 # Spring Boot "Calculator" Project
 
 Projekt serwisu REST, która pozwala planować oraz wykonywać obliczenia matematyczne.
-Napisana w języku Java z użyciem Spring Boot 1.5.9.RELEASE i Maven w IntelliJ IDEA.
+Napisany w języku Java z użyciem Spring Boot 1.5.9.RELEASE i Maven w IntelliJ IDEA.
 
 ## Uruchomienie aplikacji 
 
 Aplikacja jest dostarczona jako jar z wbudowaną bazą danych H2. 
 
-* Wymagane są JDK 1.8+ oraz Maven 3.x
+* Wymagania: JDK 1.8+ oraz Maven 3.x
 * Sklonuj repozytorium
 * Zbuduj i uruchom testy ```mvn clean package```
 * Po pomyślnym zbudowaniu projektu, można uruchomić poprzez uruchomienie jar w katalogu:
@@ -18,16 +18,16 @@ Aplikacja jest dostarczona jako jar z wbudowaną bazą danych H2.
 
 ## Opis aplikacji
 
-Projekt serwisu REST, która pozwala planować oraz wykonywać obliczenia matematyczne. Używa wbudowanej bazy danych H2 działającej na porcie 9212.
-Wszystkie funkcje dostępne są endpointach serwisu, które są opisane poniżej. 
-Przykładowy endpoint wyświetlający kalkulację w projekcie ```id = 13```
+Projekt serwisu REST, który pozwala planować oraz wykonywać obliczenia matematyczne. Używa wbudowanej bazy danych H2 działającej na porcie 9212.
+Wszystkie funkcje dostępne są w endpointach serwisu, które są opisane poniżej. 
+Przykładowy endpoint wyświetlający kalkulację ```id = 5``` w projekcie ```id = 13```
 ```    
-http://localhost:9212/v1/projects/1/calculations
+http://localhost:9212/v1/projects/13/calculations/5
 ```
 
 Założenia dotyczące obliczeń matematycznych:
 
-* Do wykonywania obliczeń używamy liczb wymiernych w postaci dzięsiętnej z separatorem kropki np: ``` 1, 19.67, 8323.123111, 0.233, -333.1 ```
+* Do wykonywania obliczeń używamy liczb wymiernych w postaci dzięsiętnej z separatorem kropki (maksymalnie dwa miejsca po kropce) np: ``` 1, 19.67, 8323.12, 0.23, -333.1 ```
 * Można używać czterech operatorów: ``` '+' '-' '*' '/' ```
 * Nie można używać nawiasów
 * Wyrażenie matematyczne musi zostać zapisane w formacie bez spacji: ``` 1.23*544+5+6/7.54 ```
@@ -38,8 +38,8 @@ Lista funkcjonalności aplikacji:
 * Tworzenie kalkulacji, które mają opis, działanie matematyczne, wynik oraz czas ostatniej aktualizacji wyniku.
 * Wyświetlanie, aktualizowanie oraz usuwanie projektów i kalkulacji.
 * Uruchamianie obliczeń dla jednej lub wielu kalkulacji.
-* Zawiera skrypt sql inicjalizujący bazowe dane w bazie danych wymagane w testacha.
-* Zawiera testy kontrolerów oraz serwisów.
+* Zawiera skrypt sql inicjalizujący dane w bazie danych wymagane w testach.
+* Zawiera testy większości klas.
 * Dodatkowo zawiera kolekcję testów w programie Postman, która znajduje się w katalogu:
 ```    
  src/test/resources/PostmanTests.json
@@ -210,7 +210,7 @@ Content-Type: application/json
 RESPONSE: HTTP 204 (No Content)
 ```
 
-### Pytania: tkrutel@hotmail.com
+#### Pytania: tkrutel@hotmail.com
 
 
 

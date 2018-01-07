@@ -31,16 +31,16 @@ public class ProjectController
     {
         Collection<Project> projects = projectService.getProjects();
 
-        return projects.isEmpty() ? noContent() : okBody(projects);
+        return projects.isEmpty() ? statusNoContent() : statusOkWithBody(projects);
     }
 
     @PostMapping(value = EMPTY_PATH)
     public ResponseEntity<Long> addProject(@RequestBody @Valid Project project)
     {
-        prepareProjectData(project, null);
+        setUpProjectData(project, null);
         projectService.addProject(project);
 
-        return created(PROJECTS_PATH, project.getId());
+        return statusCreated(PROJECTS_PATH, project.getId());
     }
 
     @GetMapping(value = PROJECT_ID_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -48,17 +48,17 @@ public class ProjectController
     {
         Project project = projectService.getProject(projectId);
 
-        return okBody(project);
+        return statusOkWithBody(project);
     }
 
     @PutMapping(value = PROJECT_ID_PATH)
     public ResponseEntity<?> updateProject(@PathVariable Long projectId, @RequestBody @Valid Project project)
     {
         projectService.getProject(projectId);
-        prepareProjectData(project, projectId);
+        setUpProjectData(project, projectId);
         projectService.updateProject(project);
 
-        return noContent();
+        return statusNoContent();
     }
 
     @DeleteMapping(value = PROJECT_ID_PATH)
@@ -67,11 +67,11 @@ public class ProjectController
         projectService.getProject(projectId);
         projectService.deleteProject(projectId);
 
-        return noContent();
+        return statusNoContent();
     }
 
-    private void prepareProjectData(@RequestBody @Valid Project project, Long o)
+    private void setUpProjectData(Project project, Long id)
     {
-        project.setId(o);
+        project.setId(id);
     }
 }

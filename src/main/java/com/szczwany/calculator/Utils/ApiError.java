@@ -3,11 +3,15 @@ package com.szczwany.calculator.Utils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
 
+import java.sql.Timestamp;
 import java.util.Date;
+
+import static com.szczwany.calculator.Utils.Globals.DATE_TIME_FORMAT;
+import static com.szczwany.calculator.Utils.Globals.ONE_HOUR_MILISECONDS;
 
 public class ApiError
 {
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_FORMAT)
     private Date timeStamp;
     private String errorCode;
     private HttpStatus errorStatus;
@@ -16,7 +20,7 @@ public class ApiError
 
     public ApiError()
     {
-        this.timeStamp = new Date();
+        this.timeStamp = new Timestamp(System.currentTimeMillis() + ONE_HOUR_MILISECONDS);
     }
 
     public void initializeErrorData(HttpStatus status, Exception exception)

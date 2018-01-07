@@ -2,7 +2,7 @@ package com.szczwany.calculator.Calculator.math.operator;
 
 import com.szczwany.calculator.Calculator.math.IMathSign;
 
-public class Minus extends AbstractOperator
+public class Minus extends Operator
 {
     public Minus(IMathSign left, IMathSign right)
     {

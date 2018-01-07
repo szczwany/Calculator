@@ -7,22 +7,22 @@ import java.net.URI;
 
 public final class Response
 {
-    public static ResponseEntity<?> noContent()
+    public static ResponseEntity<?> statusNoContent()
     {
         return ResponseEntity.noContent().build();
     }
 
-    public static ResponseEntity<?> ok()
+    public static ResponseEntity<?> statusOk()
     {
         return ResponseEntity.ok().build();
     }
 
-    public static <T> ResponseEntity<T> okBody(T t)
+    public static <T> ResponseEntity<T> statusOkWithBody(T t)
     {
         return ResponseEntity.ok().body(t);
     }
 
-    public static ResponseEntity<Long> created(String path, Long id)
+    public static ResponseEntity<Long> statusCreated(String path, Long id)
     {
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path(path)
