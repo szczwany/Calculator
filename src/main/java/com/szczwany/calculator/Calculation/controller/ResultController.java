@@ -1,8 +1,8 @@
 package com.szczwany.calculator.Calculation.controller;
 
 import com.szczwany.calculator.Calculation.model.Calculation;
+import com.szczwany.calculator.Calculation.model.ResultThread;
 import com.szczwany.calculator.Calculation.service.CalculationService;
-import com.szczwany.calculator.Calculator.Calculator;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
 import org.springframework.http.MediaType;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static com.szczwany.calculator.Utils.Globals.*;
 import static com.szczwany.calculator.Utils.Response.*;
@@ -34,7 +36,7 @@ public class ResultController
     {
         Collection<Calculation> calculations = calculationService.getCalculations();
 
-        return calculations.isEmpty() ? noContent() : okBody(calculations);
+        return calculations.isEmpty() ? statusNoContent() : statusOkWithBody(calculations);
     }
 
     @GetMapping(value = ALL_CALCULATIONS_PATH + RESULT_PATH)
@@ -63,24 +65,23 @@ public class ResultController
         return evaluateCalculations(Collections.singletonList(calculation));
     }
 
-    private void getAndSaveCalculationResult(Calculation calculation)
-    {
-        Double result = Calculator.calculate(calculation.getExpression());
-
-        if(result != null)
-        {
-            calculation.setResultAndUpdatedAt(result);
-            calculationService.updateCalculation(calculation);
-        }
-    }
-
     private ResponseEntity<?> evaluateCalculations(Collection<Calculation> calculations)
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(4);
+
         for (Calculation calculation : calculations)
         {
-            getAndSaveCalculationResult(calculation);
+            ResultThread resultWorker = new ResultThread(calculation, calculationService);
+            executorService.submit(resultWorker);
         }
 
-        return noContent();
+        executorService.shutdown();
+
+        while (!executorService.isTerminated())
+        {
+
+        }
+
+        return statusNoContent();
     }
 }
