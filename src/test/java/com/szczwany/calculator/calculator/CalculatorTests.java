@@ -21,7 +21,7 @@ public class CalculatorTests
     @Test
     public void whenValidExpression_returnResult()
     {
-        assertEquals(BigDecimal.valueOf(0), calculate("2-2*2/2"));
+        assertEquals(BigDecimal.valueOf(1), calculate("3-2*2+2"));
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.szczwany.calculator.helpers;
 
-import com.szczwany.calculator.Calculation.model.Calculation;
-import com.szczwany.calculator.Project.model.Project;
+import com.szczwany.calculator.calculation.model.Calculation;
+import com.szczwany.calculator.project.model.Project;
 import org.assertj.core.util.Lists;
 
 import java.util.ArrayList;

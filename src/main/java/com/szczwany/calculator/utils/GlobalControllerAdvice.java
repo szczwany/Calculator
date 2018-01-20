@@ -1,7 +1,7 @@
 package com.szczwany.calculator.utils;
 
-import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
-import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
+import com.szczwany.calculator.calculation.exception.CalculationNotFoundException;
+import com.szczwany.calculator.project.exception.ProjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
