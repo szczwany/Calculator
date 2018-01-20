@@ -1,6 +1,6 @@
 package com.szczwany.calculator.Project;
 
-import com.szczwany.calculator.Helpers.ProjectFactory;
+import com.szczwany.calculator.helpers.ProjectFactory;
 import com.szczwany.calculator.Project.exception.ProjectNotFoundException;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.repository.IProjectRepository;
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.utils.Globals.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

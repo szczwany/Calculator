@@ -4,8 +4,8 @@ import com.szczwany.calculator.Calculation.controller.CalculationController;
 import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.service.CalculationService;
-import com.szczwany.calculator.Helpers.CalculationFactory;
-import com.szczwany.calculator.Helpers.ProjectFactory;
+import com.szczwany.calculator.helpers.CalculationFactory;
+import com.szczwany.calculator.helpers.ProjectFactory;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.service.ProjectService;
 import org.assertj.core.util.Lists;
@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static com.szczwany.calculator.Helpers.ObjectConverter.convertToJson;
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.helpers.ObjectConverter.convertToJson;
+import static com.szczwany.calculator.utils.Globals.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.BDDMockito.given;

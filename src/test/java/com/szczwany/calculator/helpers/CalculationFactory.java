@@ -1,4 +1,4 @@
-package com.szczwany.calculator.Helpers;
+package com.szczwany.calculator.helpers;
 
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Project.model.Project;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.utils.Globals.*;
 
 // TODO refactor ... -> design pattern ?
 

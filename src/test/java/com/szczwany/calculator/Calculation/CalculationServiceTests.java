@@ -5,8 +5,8 @@ import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.repository.ICalculationRepository;
 import com.szczwany.calculator.Calculation.service.CalculationService;
 import com.szczwany.calculator.Calculation.service.ICalculationService;
-import com.szczwany.calculator.Helpers.CalculationFactory;
-import com.szczwany.calculator.Helpers.ProjectFactory;
+import com.szczwany.calculator.helpers.CalculationFactory;
+import com.szczwany.calculator.helpers.ProjectFactory;
 import com.szczwany.calculator.Project.model.Project;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.utils.Globals.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

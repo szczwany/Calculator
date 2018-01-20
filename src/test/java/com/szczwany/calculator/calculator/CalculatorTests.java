@@ -1,10 +1,12 @@
-package com.szczwany.calculator.Calculator;
+package com.szczwany.calculator.calculator;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.szczwany.calculator.Calculator.Calculator.calculate;
+import java.math.BigDecimal;
+
+import static com.szczwany.calculator.calculator.Calculator.calculate;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
@@ -19,7 +21,13 @@ public class CalculatorTests
     @Test
     public void whenValidExpression_returnResult()
     {
-        assertEquals(0, calculate("2-2*2/2"),0);
+        assertEquals(BigDecimal.valueOf(0), calculate("2-2*2/2"));
+    }
+
+    @Test
+    public void whenValidExpressionWithDot_returnResult()
+    {
+        assertEquals(BigDecimal.valueOf(-0.44), calculate("2-2.54*2.11/2.2"));
     }
 
     @Test

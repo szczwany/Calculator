@@ -16,8 +16,8 @@ import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.szczwany.calculator.Utils.Globals.*;
-import static com.szczwany.calculator.Utils.Response.*;
+import static com.szczwany.calculator.utils.Globals.*;
+import static com.szczwany.calculator.utils.Response.*;
 
 @Controller
 public class ResultController

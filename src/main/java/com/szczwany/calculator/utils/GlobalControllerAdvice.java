@@ -1,4 +1,4 @@
-package com.szczwany.calculator.Utils;
+package com.szczwany.calculator.utils;
 
 import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Project.exception.ProjectNotFoundException;

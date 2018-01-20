@@ -1,16 +1,17 @@
-package com.szczwany.calculator.Calculator;
+package com.szczwany.calculator.calculator;
 
-import com.szczwany.calculator.Calculator.math.IMathSign;
-import com.szczwany.calculator.Calculator.math.InfixToRPNConverter;
-import com.szczwany.calculator.Calculator.math.operand.Number;
-import com.szczwany.calculator.Calculator.math.operator.Divide;
-import com.szczwany.calculator.Calculator.math.operator.Minus;
-import com.szczwany.calculator.Calculator.math.operator.Multiply;
-import com.szczwany.calculator.Calculator.math.operator.Plus;
+import com.szczwany.calculator.calculator.math.IMathSign;
+import com.szczwany.calculator.calculator.math.InfixToRPNConverter;
+import com.szczwany.calculator.calculator.math.operand.Number;
+import com.szczwany.calculator.calculator.math.operator.Divide;
+import com.szczwany.calculator.calculator.math.operator.Minus;
+import com.szczwany.calculator.calculator.math.operator.Multiply;
+import com.szczwany.calculator.calculator.math.operator.Plus;
 
+import java.math.BigDecimal;
 import java.util.Stack;
 
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.utils.Globals.*;
 
 public final class Calculator
 {
@@ -19,7 +20,7 @@ public final class Calculator
 
     }
 
-    public static Double calculate(String expression)
+    public static BigDecimal calculate(String expression)
     {
         InfixToRPNConverter infixToRPNConverter = new InfixToRPNConverter();
 
@@ -36,14 +37,14 @@ public final class Calculator
         {
             if (!isOperator(element))
             {
-                numbers.push(new Number(Double.valueOf(element)));
+                numbers.push(new Number(new BigDecimal(element)));
             }
             else
             {
                 second = numbers.pop();
                 first = numbers.pop();
 
-                if(second.execute() == 0 && element.equals(DIVIDE_SIGN))
+                if(second.execute().equals(BigDecimal.ZERO) && element.equals(DIVIDE_SIGN))
                 {
                     return null;
                 }

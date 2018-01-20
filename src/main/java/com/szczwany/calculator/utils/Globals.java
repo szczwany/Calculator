@@ -1,4 +1,4 @@
-package com.szczwany.calculator.Utils;
+package com.szczwany.calculator.utils;
 
 public final class Globals
 {

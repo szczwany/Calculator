@@ -1,12 +1,12 @@
-package com.szczwany.calculator.Calculator.math;
+package com.szczwany.calculator.calculator.math;
 
-import com.szczwany.calculator.Calculator.Calculator;
+import com.szczwany.calculator.calculator.Calculator;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.utils.Globals.*;
 
 public class InfixToRPNConverter
 {

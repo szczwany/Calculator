@@ -1,10 +1,9 @@
 package com.szczwany.calculator.Calculation;
 
-import com.szczwany.calculator.Calculation.exception.CalculationNotFoundException;
 import com.szczwany.calculator.Calculation.model.Calculation;
 import com.szczwany.calculator.Calculation.repository.ICalculationRepository;
-import com.szczwany.calculator.Helpers.CalculationFactory;
-import com.szczwany.calculator.Helpers.ProjectFactory;
+import com.szczwany.calculator.helpers.CalculationFactory;
+import com.szczwany.calculator.helpers.ProjectFactory;
 import com.szczwany.calculator.Project.model.Project;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +12,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.szczwany.calculator.Utils.Globals.TEST_ID;
+import static com.szczwany.calculator.utils.Globals.TEST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest

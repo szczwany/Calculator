@@ -1,6 +1,6 @@
-package com.szczwany.calculator.Calculator.math.operator;
+package com.szczwany.calculator.calculator.math.operator;
 
-import com.szczwany.calculator.Calculator.math.IMathSign;
+import com.szczwany.calculator.calculator.math.IMathSign;
 
 abstract class Operator implements IMathSign
 {

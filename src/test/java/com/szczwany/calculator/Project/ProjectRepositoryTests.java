@@ -1,6 +1,6 @@
 package com.szczwany.calculator.Project;
 
-import com.szczwany.calculator.Helpers.ProjectFactory;
+import com.szczwany.calculator.helpers.ProjectFactory;
 import com.szczwany.calculator.Project.model.Project;
 import com.szczwany.calculator.Project.repository.IProjectRepository;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static com.szczwany.calculator.Utils.Globals.TEST_ID;
+import static com.szczwany.calculator.utils.Globals.TEST_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNull;
 

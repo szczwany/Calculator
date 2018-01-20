@@ -2,16 +2,16 @@ package com.szczwany.calculator.Calculation.model;
 
 import com.fasterxml.jackson.annotation.*;
 import com.szczwany.calculator.Project.model.Project;
-import com.szczwany.calculator.Utils.Globals;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.szczwany.calculator.Utils.Globals.*;
+import static com.szczwany.calculator.utils.Globals.*;
 
 @Entity
 @Table(name = "calculations")
@@ -36,7 +36,7 @@ public class Calculation
     private String expression;
 
     @Column(name = "result")
-    private Double result;
+    private BigDecimal result;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_TIME_FORMAT)
     @Temporal(TemporalType.TIMESTAMP)
@@ -82,12 +82,12 @@ public class Calculation
         this.expression = expression;
     }
 
-    public Double getResult()
+    public BigDecimal getResult()
     {
         return result;
     }
 
-    public void setResult(Double result)
+    public void setResult(BigDecimal result)
     {
         this.result = result;
     }
@@ -112,7 +112,7 @@ public class Calculation
         this.project = project;
     }
 
-    public void setResultAndUpdatedAt(Double result)
+    public void setResultAndUpdatedAt(BigDecimal result)
     {
         this.setResult(result);
         this.setUpdatedAt(new Timestamp(System.currentTimeMillis() + ONE_HOUR_MILISECONDS));

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.Collection;
 
-import static com.szczwany.calculator.Utils.Globals.*;
-import static com.szczwany.calculator.Utils.Response.*;
+import static com.szczwany.calculator.utils.Globals.*;
+import static com.szczwany.calculator.utils.Response.*;
 
 @Controller
 @RequestMapping(value = CALCULATIONS_PATH)

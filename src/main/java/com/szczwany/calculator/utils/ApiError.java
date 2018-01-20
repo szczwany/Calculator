@@ -1,4 +1,4 @@
-package com.szczwany.calculator.Utils;
+package com.szczwany.calculator.utils;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.http.HttpStatus;
@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import static com.szczwany.calculator.Utils.Globals.DATE_TIME_FORMAT;
-import static com.szczwany.calculator.Utils.Globals.ONE_HOUR_MILISECONDS;
+import static com.szczwany.calculator.utils.Globals.DATE_TIME_FORMAT;
+import static com.szczwany.calculator.utils.Globals.ONE_HOUR_MILISECONDS;
 
 public class ApiError
 {

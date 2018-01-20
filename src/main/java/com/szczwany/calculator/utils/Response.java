@@ -1,4 +1,4 @@
-package com.szczwany.calculator.Utils;
+package com.szczwany.calculator.utils;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

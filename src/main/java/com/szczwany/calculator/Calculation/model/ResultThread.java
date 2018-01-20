@@ -1,7 +1,9 @@
 package com.szczwany.calculator.Calculation.model;
 
 import com.szczwany.calculator.Calculation.service.CalculationService;
-import com.szczwany.calculator.Calculator.Calculator;
+import com.szczwany.calculator.calculator.Calculator;
+
+import java.math.BigDecimal;
 
 public class ResultThread implements Runnable
 {
@@ -22,7 +24,7 @@ public class ResultThread implements Runnable
 
     private void getAndSaveCalculationResult()
     {
-        Double result = Calculator.calculate(calculation.getExpression());
+        BigDecimal result = Calculator.calculate(calculation.getExpression());
 
         if(result != null)
         {

@@ -1,4 +1,4 @@
-package com.szczwany.calculator.Helpers;
+package com.szczwany.calculator.helpers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
